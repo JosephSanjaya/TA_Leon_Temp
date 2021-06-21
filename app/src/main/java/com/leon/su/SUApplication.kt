@@ -1,16 +1,11 @@
 package com.leon.su
 
 import android.app.Application
-import com.leon.su.di.RegisterDI
+import com.leon.su.di.ProductDI
+import com.leon.su.di.UserDI
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
 
 class SUApplication : Application() {
 
@@ -19,7 +14,8 @@ class SUApplication : Application() {
             androidLogger()
             androidContext(this@SUApplication)
             modules(
-                RegisterDI.modules
+                UserDI.modules,
+                ProductDI.modules
             )
         }
         super.onCreate()

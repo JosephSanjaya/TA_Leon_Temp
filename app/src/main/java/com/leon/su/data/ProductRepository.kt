@@ -3,6 +3,7 @@ package com.leon.su.data
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.leon.su.domain.Product
 import com.leon.su.domain.State
 import com.leon.su.domain.Users
 import kotlinx.coroutines.Dispatchers
@@ -11,22 +12,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
-class RegisterRepository {
-
-    suspend fun register(
-        email: String,
-        password: String,
-        data: Users
-    ) = flow {
+class ProductRepository {
+    suspend fun product(email: String, password: String, data: Users) = flow {
         emit(State.Loading())
         val result = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
-        Firebase.database.reference.child(Users.REF).child(result.user?.uid.toString()).setValue(
+        Firebase.database.reference.child(Product.REF).child(result.user?.uid.toString()).setValue(
             data.apply {
                 id = result.user?.uid
             }
@@ -36,12 +26,11 @@ class RegisterRepository {
         throw it
     }.flowOn(Dispatchers.IO)
 
-    suspend fun buatSomething(nama: String, deskripsi: String) = flow {
+    suspend fun productReg(namaProduct: String, hGrosir: Double, hEcer: Double, berat: Double) = flow {
         emit(State.Loading())
-        val push = Firebase.database.reference.child("mata_pelajaran").push()
-//        push.setValue(MataPelajaran.Detail(id = push.key, nama = nama, deskripsi = deskripsi))
-//            .await()
+        val push = Firebase.database.reference.child(Product.REF).push()
+        push.setValue(Product.productDetail(idProduct = push.key, namaProduct = namaProduct, hargaGrosir = hGrosir, hargaEcer = hEcer, beratProduct = berat))
+            .await()
         emit(State.Success(push.key))
     }
-
 }

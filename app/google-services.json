@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "90514570330",
+    "firebase_url": "https://sumber-ulum-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "sumber-ulum-app",
+    "storage_bucket": "sumber-ulum-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90514570330:android:ab777f6378c6c8103fec63",
+        "android_client_info": {
+          "package_name": "com.leon.su"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "90514570330-1ulasbiqnc70i103bs8rl79s2gkvejnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApOCnrtm5iS2ylSbZTIiGJxfuMl2Pfpks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "90514570330-1ulasbiqnc70i103bs8rl79s2gkvejnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,26 @@
 <resources>
-    <string name="app_name">SU_App</string>
+    <string name="app_name">Toko Sumber Ulum App</string>
+    <string name="et_email">Email</string>
+    <string name="et_password">Password</string>
+    <string name="login_button">Masuk</string>
+    <string name="invoice_button">Buat Invoice Baru</string>
+    <string name="stock_button">Barang Masuk</string>
+    <string name="price_button">Ubah Harga</string>
+    <string name="product_button">Tambah Produk Baru</string>
+    <string name="uregister_button">Daftar Akun Baru</string>
+    <string name="et_nama">Nama Lengkap</string>
+    <string name="register_button">Daftar</string>
+    <string name="product_name">Nama Produk</string>
+    <string name="capital_price">Harga Modal</string>
+    <string name="retail_price">Harga Ecer</string>
+    <string name="wholesale_price">Harga Grosir</string>
+    <string name="weight">Berat Produk</string>
+    <string name="stock">Stok</string>
+
+    <string-array name="product_type">
+        <item>Makanan</item>
+        <item>Minuman</item>
+        <item>Lain-lain</item>
+    </string-array>
+
 </resources>

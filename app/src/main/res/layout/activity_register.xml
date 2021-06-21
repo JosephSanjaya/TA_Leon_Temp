@@ -9,26 +9,37 @@
             name="listener"
             type="android.view.View.OnClickListener"/>
     </data>
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.LoginActivity">
+        tools:context=".presentation.UserRegisterActivity">
 
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/etEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:hint="@string/et_email"
             android:inputType="text"
-            app:layout_constraintBottom_toTopOf="@+id/etPassword"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/etNamaLengkap"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
+
+        <EditText
+            android:id="@+id/etNamaLengkap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="@string/et_nama"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@+id/etEmail"
+            app:layout_constraintBottom_toTopOf="@+id/etPassword"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -37,19 +48,19 @@
             android:layout_margin="8dp"
             android:hint="@string/et_password"
             android:inputType="textPassword"
-            app:layout_constraintBottom_toTopOf="@+id/LoginButton"
+            app:layout_constraintTop_toBottomOf="@+id/etNamaLengkap"
+            app:layout_constraintBottom_toTopOf="@+id/RegisterButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etUsername" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/LoginButton"
+            android:id="@+id/RegisterButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:onClick="@{listener}"
-            android:text="@string/login_button"
+            android:text="@string/register_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
