@@ -34,25 +34,24 @@ class UserRepository {
         throw it
     }.flowOn(Dispatchers.IO)
 
-
-/*
-    suspend fun sendPasswordResetEmail(email: String) = flow {
-        emit(State.Loading())
-        Firebase.auth.sendPasswordResetEmail(
-            email,
-            ActionCodeSettings.newBuilder()
-                .setHandleCodeInApp(true)
-                .setAndroidPackageName(
-                    AppUtils.getAppPackageName(),
-                    true,
-                    AppUtils.getAppVersionName()
-                )
-                .setUrl("${Users.FORGOT_URL}$email")
-                .build()
-        ).await()
-        emit(State.Success(true))
-    }.flowOn(Dispatchers.IO)
-*/
+    /*
+        suspend fun sendPasswordResetEmail(email: String) = flow {
+            emit(State.Loading())
+            Firebase.auth.sendPasswordResetEmail(
+                email,
+                ActionCodeSettings.newBuilder()
+                    .setHandleCodeInApp(true)
+                    .setAndroidPackageName(
+                        AppUtils.getAppPackageName(),
+                        true,
+                        AppUtils.getAppVersionName()
+                    )
+                    .setUrl("${Users.FORGOT_URL}$email")
+                    .build()
+            ).await()
+            emit(State.Success(true))
+        }.flowOn(Dispatchers.IO)
+    */
     suspend fun buatSomething(nama: String, peran: String) = flow {
         emit(State.Loading())
         val push = Firebase.database.reference.child("user").push()
@@ -60,5 +59,4 @@ class UserRepository {
 //            .await()
         emit(State.Success(push.key))
     }
-
 }

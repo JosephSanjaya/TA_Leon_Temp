@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.leon.su.data.ProductRepository
 import com.leon.su.domain.Product
 import com.leon.su.domain.State
-import com.leon.su.domain.Users
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -26,6 +25,23 @@ class ProductViewModel(private val repo: ProductRepository) : ViewModel() {
 
     fun product(product: Product) = viewModelScope.launch {
         repo.product(product)
+            .catch {
+                _product.emit(State.Failed(it))
+            }
+            .collect {
+                _product.emit(it)
+            }
+    }
+
+    private val _fetch = MutableStateFlow<State<String?>>(State.Idle())
+    val mFetch: StateFlow<State<String?>> get() = _product
+
+    fun resetFetchState() {
+        _fetch.value = State.Idle()
+    }
+
+    fun fetchData() = viewModelScope.launch {
+        repo.getProductFirestore()
             .catch {
                 _product.emit(State.Failed(it))
             }
