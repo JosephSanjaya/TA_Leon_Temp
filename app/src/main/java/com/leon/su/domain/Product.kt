@@ -25,10 +25,10 @@ object Product {
         @SerialName("hEcer")
         var hargaEcer: Double = 0.0,
 
-        @PropertyName("berat")
+/*        @PropertyName("berat")
         @SerialName("berat")
         var beratProduct: Double = 0.0,
-
+*/
         @PropertyName("stok")
         @SerialName("stok")
         var stokProduct: Int = 0

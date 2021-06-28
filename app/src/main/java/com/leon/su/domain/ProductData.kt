@@ -14,8 +14,8 @@ data class ProductData(
     @SerialName("hEcer")
     var hargaEcer: Double = 0.0,
 
-    @SerialName("berat")
-    var beratProduct: Double = 0.0,
+    @SerialName("satuan")
+    var satuanProduct: Double = 0.0,
 
     @SerialName("stok")
     var stokProduct: Int = 0
