@@ -28,38 +28,19 @@ class UserRegisterActivity:
     }
 
     private fun stateObserve() {
-        lifecycleScope.launch {
-            mUserViewModel.mRegister.collect {
-                when (it) {
-                    is State.Idle -> {
-                        // idle
-                    }
-                    is State.Loading -> {
-                        // loading
-                    }
-                    is State.Success -> {
-                        mUserViewModel.resetLoginState()
-                        // success
-                    }
-                    is State.Failed -> {
-                        mUserViewModel.resetLoginState()
-                    }
-                }
-            }
-        }
     }
 
     override fun onClick(v: View?) {
         when (v) {
             mBinding.LoginButton -> {
-                mUserViewModel.userRegister(
-                    mBinding.etUsername.text.toString(),
-                    mBinding.etPassword.text.toString(),
-                    mUser.apply {
-                        nama = mBinding.etUsername.text.toString()
-                        roles = "karyawan"
-                    }
-                )
+//                mUserViewModel.userRegister(
+//                    mBinding.etUsername.text.toString(),
+//                    mBinding.etPassword.text.toString(),
+//                    mUser.apply {
+//                        nama = mBinding.etUsername.text.toString()
+//                        roles = "karyawan"
+//                    }
+//                )
             }
         }
     }

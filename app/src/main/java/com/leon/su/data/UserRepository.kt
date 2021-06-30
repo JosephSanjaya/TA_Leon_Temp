@@ -1,5 +1,7 @@
 package com.leon.su.data
 
+import android.content.SharedPreferences
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -7,28 +9,31 @@ import com.leon.su.domain.State
 import com.leon.su.domain.UserData
 import com.leon.su.domain.UserResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
-class UserRepository {
+class UserRepository(
+    private val mSharedPreferences: SharedPreferences
+) {
 
-    suspend fun userReg(user: UserData) = flow {
+    suspend fun getUserData(userUID: String) = flow {
         emit(State.Loading())
         val request = Firebase.firestore
             .collection(UserData.REF)
-            .add(user)
+            .document(userUID)
+            .get()
             .await()
-        val result = request.get().await()
-        emit(
-            State.Success(
-                UserResponse(
-                    id = result.id,
-                    data = result.toObject(UserData::class.java)
-                )
-            )
+        val result = UserResponse(
+            id = request.id,
+            data = request.toObject(UserData::class.java)
         )
+        mSharedPreferences.users = result
+        emit(State.Success(result))
     }.catch {
         throw it
     }.flowOn(Dispatchers.IO)
@@ -41,43 +46,72 @@ class UserRepository {
         throw it
     }.flowOn(Dispatchers.IO)
 
-    /*
-    suspend fun userRegOld(email: String, password: String, data: Users) = flow {
-        emit(State.Loading())
-        val result = Firebase.auth.createUserWithEmailAndPassword(email, password).await()
-        Firebase.database.reference.child(Users.REF).child(result.user?.uid.toString()).setValue(
-            data.apply {
-                id = result.user?.uid
+    @ExperimentalCoroutinesApi
+    suspend fun reloadCurrentUser() = callbackFlow {
+        trySend(State.Loading())
+        when (val currentUser = Firebase.auth.currentUser) {
+            null -> {
+                trySend(State.Failed(Throwable(UserData.MSG_USER_NOT_FOUND)))
+                close(Throwable(UserData.MSG_USER_NOT_FOUND))
             }
-        ).await()
-        emit(State.Success(result.user))
+            else -> {
+                currentUser.reload().addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        trySend(State.Success(true))
+                        close()
+                    } else {
+                        trySend(State.Failed(it.exception ?: Throwable()))
+                        close(it.exception)
+                    }
+                }
+            }
+        }
+        awaitClose()
+    }
+
+    suspend fun fetchUser() = flow {
+        emit(State.Loading())
+        val request = Firebase.firestore
+            .collection(UserData.REF)
+            .get()
+            .await()
+        val result = request.map {
+            UserResponse(
+                id = it.id,
+                data = it.toObject(UserData::class.java)
+            )
+        }
+        emit(State.Success(result))
     }.catch {
         throw it
     }.flowOn(Dispatchers.IO)
 
-        suspend fun sendPasswordResetEmail(email: String) = flow {
-            emit(State.Loading())
-            Firebase.auth.sendPasswordResetEmail(
-                email,
-                ActionCodeSettings.newBuilder()
-                    .setHandleCodeInApp(true)
-                    .setAndroidPackageName(
-                        AppUtils.getAppPackageName(),
-                        true,
-                        AppUtils.getAppVersionName()
-                    )
-                    .setUrl("${Users.FORGOT_URL}$email")
-                    .build()
-            ).await()
-            emit(State.Success(true))
-        }.flowOn(Dispatchers.IO)
-
-    suspend fun buatSomething(nama: String, peran: String) = flow {
+    suspend fun delete(password: String) = flow {
         emit(State.Loading())
-        val push = Firebase.database.reference.child("user").push()
-//        push.setValue(MataPelajaran.Detail(id = push.key, nama = nama, peran = peran))
-//            .await()
-        emit(State.Success(push.key))
-    }
-     */
+        val user = Firebase.auth.currentUser
+            ?: throw Throwable(Throwable(UserData.MSG_USER_NOT_FOUND))
+        val credential =
+            EmailAuthProvider.getCredential(user.email.toString(), password)
+        val authRequest = user.reauthenticate(credential)
+        authRequest.await()
+        val userDeleteRequest = user.delete()
+        userDeleteRequest.await()
+        val dataDeleteRequest = Firebase.firestore
+            .collection(UserData.REF)
+            .document(user.uid)
+            .delete()
+        dataDeleteRequest.await()
+        emit(State.Success(true))
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun doLogout() = flow {
+        emit(State.Loading())
+        Firebase.auth.signOut()
+        mSharedPreferences.edit().clear().apply()
+        emit(State.Success(true))
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
 }

@@ -31,25 +31,25 @@ class ProductViewModel(private val repo: ProductRepository) : ViewModel() {
         _fetch.value = State.Idle()
     }
 
-    fun fetchData() = viewModelScope.launch {
-        repo.getProduct()
-            .catch {
-                _product.emit(State.Failed(it))
-            }
-            .collect {
-                _product.emit(it)
-            }
-    }
+//    fun fetchData() = viewModelScope.launch {
+//        repo.getProduct()
+//            .catch {
+//                _product.emit(State.Failed(it))
+//            }
+//            .collect {
+//                _product.emit(it)
+//            }
+//    }
 
-    fun productRegister(productData: ProductData) = viewModelScope.launch {
-        repo.productReg(productData)
-            .catch {
-                _register.emit(State.Failed(it))
-            }
-            .collect {
-                _register.emit(it)
-            }
-    }
+//    fun productRegister(productData: ProductData) = viewModelScope.launch {
+//        repo.productReg(productData)
+//            .catch {
+//                _register.emit(State.Failed(it))
+//            }
+//            .collect {
+//                _register.emit(it)
+//            }
+//    }
 
     /*    fun product(product: Product) = viewModelScope.launch {
         repo.product(product)

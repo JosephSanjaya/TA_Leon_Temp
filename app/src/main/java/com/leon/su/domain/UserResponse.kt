@@ -1,6 +1,13 @@
 package com.leon.su.domain
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserResponse(
-    val id: String? = null,
-    val data: UserData? = null
+    @SerialName("id")
+    var id: String? = null,
+
+    @SerialName("user")
+    var data: UserData? = null,
 )

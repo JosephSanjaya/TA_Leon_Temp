@@ -55,7 +55,7 @@ class MenuActivity :
 
     override fun onClick(v: View?) {
         when (v) {
-            mBinding.ProductButton -> mProductViewModel.fetchData()
+//            mBinding.ProductButton -> mProductViewModel.fetchData()
         }
     }
 }

@@ -15,10 +15,10 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintHorizontal_bias="0.5"
     app:layout_constraintTop_toTopOf="parent"
-    app:tabIndicatorColor="@color/purple_500"
-    app:tabSelectedTextColor="@color/purple_700"
+    app:tabIndicatorColor="?attr/colorSecondary"
+    app:tabSelectedTextColor="?attr/colorPrimary"
     app:tabTextAppearance="@style/TabLayoutTextStyle"
-    app:tabTextColor="@color/black"/>
+    app:tabTextColor="@android:color/black"/>
 
 <androidx.viewpager2.widget.ViewPager2
     android:id="@+id/viewPager"

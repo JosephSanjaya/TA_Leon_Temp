@@ -18,15 +18,15 @@ class InvoiceActivity : AppCompatActivity() {
         var adapter = Adapter(supportFragmentManager, lifecycle)
 
         mBinding.viewPager.adapter = adapter
-        TabLayoutMediator(mBinding.tabLayout, mBinding.viewPager, object : TabLayoutMediator.OnConfigureTabCallback{
-            override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-                when(position)
-                {
-                    0->{tab.text = "Makanan"}
-                    1->{tab.text = "Minuman"}
-                    2->{tab.text = "Lainnya"}
-                }
-            }
-        }).attach()
+//        TabLayoutMediator(mBinding.tabLayout, mBinding.viewPager, object : TabLayoutMediator.OnConfigureTabCallback{
+//            override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
+//                when(position)
+//                {
+//                    0->{tab.text = "Makanan"}
+//                    1->{tab.text = "Minuman"}
+//                    2->{tab.text = "Lainnya"}
+//                }
+//            }
+//        }).attach()
     }
 }
