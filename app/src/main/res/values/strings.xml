@@ -16,6 +16,10 @@
     <string name="wholesale_price">Harga Grosir</string>
     <string name="weight">Berat Produk</string>
     <string name="stock">Stok</string>
+    <string name="label_verifikasi_desc">Verifikasi akun telah dikirimkan melalui email.</string>
+    <string name="label_button_retry">Coba Lagi</string>
+    <string name="label_button_logout">Keluar</string>
+    <string name="label_loading">Loading…</string>
 
     <string-array name="product_type">
         <item>Makanan</item>

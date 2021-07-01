@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
+  ~ @Github (https://github.com/JosephSanjaya),
+  ~ @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item android:id="@+id/logout"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        app:iconTint="?attr/colorOnPrimary"
+        android:icon="@drawable/ic_baseline_logout"
+        android:title="Keluar" />
+</menu>

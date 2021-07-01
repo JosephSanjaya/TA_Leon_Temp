@@ -18,6 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.leon.su.R
 import com.leon.su.domain.Roles
 import com.leon.su.domain.UserResponse
+import com.leon.su.presentation.MenuActivity.Companion.openMenu
 import com.leon.su.presentation.observer.PasswordObserver
 import com.leon.su.presentation.observer.UserObserver
 import com.leon.su.presentation.observer.VerifyObserver
@@ -75,6 +76,7 @@ class SplashActivity :
     }
 
     override fun onReloadFailed(e: Throwable) {
+        ToastUtils.showShort(e.message)
         if (!isUmumLoaded) {
             ActivityUtils.startActivity(LoginActivity::class.java)
             isUmumLoaded = true
@@ -94,6 +96,7 @@ class SplashActivity :
     }
 
     override fun onGetUserDataFailed(e: Throwable) {
+        ToastUtils.showShort(e.message)
         ActivityUtils.finishAllActivities(true)
         ActivityUtils.startActivity(LoginActivity::class.java)
         super.onGetUserDataFailed(e)
@@ -125,7 +128,11 @@ class SplashActivity :
     }
 
     private fun next(isAdmin: Boolean = false) {
-        // TODO launch menu pass isAdmin Variable
         ActivityUtils.finishAllActivities(true)
+        if (Firebase.auth.currentUser?.isEmailVerified == false) {
+            ActivityUtils.startActivity(VerifyActivity::class.java)
+        } else {
+            openMenu(isAdmin)
+        }
     }
 }

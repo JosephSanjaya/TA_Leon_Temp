@@ -11,80 +11,105 @@
             type="android.view.View.OnClickListener"/>
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.MenuActivity">
+        android:background="@android:color/white"
+        android:elevation="0dp">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/InvoiceButton"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:onClick="@{listener}"
-            android:text="@string/invoice_button"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/StockButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/StockButton"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/AppTheme.AppBarOverlay" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:onClick="@{listener}"
-            android:text="@string/stock_button"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/PriceButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/InvoiceButton"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:layout_height="match_parent"
+            tools:context=".presentation.MenuActivity"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/PriceButton"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:onClick="@{listener}"
-            android:text="@string/price_button"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@id/ProductButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/StockButton"
-            app:layout_constraintVertical_chainStyle="packed" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/InvoiceButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:onClick="@{listener}"
+                android:text="@string/invoice_button"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/StockButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/ProductButton"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:onClick="@{listener}"
-            android:text="@string/product_button"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@+id/uRegisterButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/PriceButton"
-            app:layout_constraintVertical_chainStyle="packed" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/StockButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:onClick="@{listener}"
+                android:text="@string/stock_button"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/PriceButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/InvoiceButton"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/uRegisterButton"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_margin="5dp"
-            android:onClick="@{listener}"
-            android:text="@string/uregister_button"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ProductButton"
-            app:layout_constraintVertical_chainStyle="packed" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/PriceButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:onClick="@{listener}"
+                android:text="@string/price_button"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@id/ProductButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/StockButton"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/ProductButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:onClick="@{listener}"
+                android:text="@string/product_button"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/uRegisterButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/PriceButton"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/uRegisterButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_margin="5dp"
+                android:onClick="@{listener}"
+                android:text="@string/uregister_button"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ProductButton"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

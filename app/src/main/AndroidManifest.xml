@@ -23,6 +23,12 @@
             android:name=".presentation.StockUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".presentation.VerifyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.MenuActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
