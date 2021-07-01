@@ -10,7 +10,6 @@
             type="android.view.View.OnClickListener"/>
     </data>
 
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,7 +30,6 @@
                 app:theme="@style/AppTheme.AppBarOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -48,11 +46,11 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textColorHint="?attr/colorOnPrimary"
                 android:backgroundTint="?attr/colorOnPrimary"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/etPassword"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
 
             <EditText
@@ -66,11 +64,11 @@
                 android:textColorHint="@android:color/white"
                 android:backgroundTint="@android:color/white"
                 android:textAppearance="?attr/textAppearanceBody1"
+                app:layout_constraintTop_toBottomOf="@+id/etUsername"
                 app:layout_constraintBottom_toTopOf="@+id/LoginButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etUsername" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/LoginButton"
