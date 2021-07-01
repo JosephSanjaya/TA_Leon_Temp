@@ -17,6 +17,10 @@ object Product {
         @SerialName("namaProduct")
         var namaProduct: String? = null,
 
+        @PropertyName("hModal")
+        @SerialName("hModal")
+        var hargaModal: Double = 0.0,
+
         @PropertyName("hGrosir")
         @SerialName("hGrosir")
         var hargaGrosir: Double = 0.0,
@@ -25,10 +29,6 @@ object Product {
         @SerialName("hEcer")
         var hargaEcer: Double = 0.0,
 
-/*        @PropertyName("berat")
-        @SerialName("berat")
-        var beratProduct: Double = 0.0,
-*/
         @PropertyName("stok")
         @SerialName("stok")
         var stokProduct: Int = 0
