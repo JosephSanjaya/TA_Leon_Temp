@@ -82,6 +82,11 @@ class VerifyActivity :
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        finish()
+    }
+
     override fun onDestroy() {
         mTimer.cancel()
         super.onDestroy()
