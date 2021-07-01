@@ -8,4 +8,10 @@
     <color name="secondaryDarkColor">#c77b00</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="secondaryTextColor">#000000</color>
+    <color name="colorBackgroundDark">#37474F</color>
+    <color name="colorBackgroundLight">#ECEFF1</color>
+    <color name="textColorPrimaryLight">#263238</color>
+    <color name="textColorPrimaryDark">#ECEFF1</color>
+    <color name="textColorSecondaryLight">#37474F</color>
+    <color name="textColorSecondaryDark">#B0BEC5</color>
 </resources>

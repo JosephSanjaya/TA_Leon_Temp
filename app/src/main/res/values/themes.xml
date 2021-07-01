@@ -7,10 +7,14 @@
         <item name="colorSecondary">@color/secondaryLightColor</item>
         <item name="colorSecondaryVariant">@color/secondaryColor</item>
         <item name="colorOnSecondary">@color/secondaryTextColor</item>
+        <item name="android:colorBackground">@color/colorBackgroundLight</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryLight</item>
+        <item name="android:textColorSecondary">@color/textColorSecondaryLight</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="MainTheme.SU_App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?android:attr/colorBackground</item>
         <item name="android:ambientShadowAlpha">0.05</item>
         <item name="android:spotShadowAlpha">0.05</item>
         <item name="textAppearanceHeadline1">@style/TextAppearance.Leon.Headline1</item>
@@ -55,7 +59,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
-    <style name="SplashTheme" parent="MainTheme.SU_App">
+    <style name="SplashTheme" parent="Theme.SU_App">
         <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
 

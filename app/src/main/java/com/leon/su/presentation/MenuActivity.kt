@@ -6,22 +6,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.leon.su.R
 import com.leon.su.databinding.ActivityMenuBinding
-import com.leon.su.domain.ProductData
-import com.leon.su.domain.State
 import com.leon.su.presentation.observer.UserObserver
-import com.leon.su.presentation.viewmodel.ProductViewModel
 import com.leon.su.presentation.viewmodel.UserViewModel
 import com.leon.su.utils.makeLoadingDialog
 import com.skydoves.bundler.bundle
 import com.skydoves.bundler.intentOf
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MenuActivity :
@@ -30,14 +24,13 @@ class MenuActivity :
     UserObserver.Interfaces {
 
     private val mBinding by viewBinding(ActivityMenuBinding::bind)
-    private val mProductViewModel by viewModel<ProductViewModel>()
     private val mViewModel by viewModel<UserViewModel>()
     private val mLoading by lazy {
         makeLoadingDialog(false)
     }
+
     // TODO check isAdmin to disable several menu
     private val isAdmin: Boolean by bundle(IS_ADMIN_KEY, true)
-    private val mProduct = ProductData()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -60,36 +53,11 @@ class MenuActivity :
             setDisplayHomeAsUpEnabled(true)
         }
         mBinding.listener = this
-        stateObserve()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
-    }
-
-    private fun stateObserve() {
-        lifecycleScope.launch {
-            mProductViewModel.mProduct.collect {
-                when (it) {
-                    is State.Idle -> {
-                        // idle
-                    }
-                    is State.Loading -> {
-                        ToastUtils.showShort("Saya sedang Loading!")
-                    }
-                    is State.Success -> {
-                        ToastUtils.showShort("Product = ${it.data}")
-                        mProductViewModel.resetProductState()
-                        // success
-                    }
-                    is State.Failed -> {
-                        ToastUtils.showShort("Error = ${it.throwable.message}")
-                        mProductViewModel.resetProductState()
-                    }
-                }
-            }
-        }
     }
 
     override fun onLogoutLoading() {
@@ -112,7 +80,7 @@ class MenuActivity :
 
     override fun onClick(v: View?) {
         when (v) {
-//            mBinding.ProductButton -> mProductViewModel.fetchData()
+            mBinding.ProductButton -> ActivityUtils.startActivity(ProductActivity::class.java)
         }
     }
 

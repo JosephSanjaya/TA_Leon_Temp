@@ -78,6 +78,7 @@ class LoginActivity :
 
     override fun onGetUserDataSuccess(user: UserResponse?) {
         loading.dismiss()
+        ActivityUtils.finishAllActivities()
         openMenu(user?.data?.roles == Roles.ADMIN.value)
         super.onGetUserDataSuccess(user)
     }

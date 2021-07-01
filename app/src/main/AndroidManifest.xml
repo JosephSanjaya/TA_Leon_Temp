@@ -20,6 +20,9 @@
             android:name=".presentation.InvoiceActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".presentation.ProductActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.StockUpdateActivity"
             android:screenOrientation="portrait" />
         <activity

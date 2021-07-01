@@ -16,6 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.leon.su.R
+import com.leon.su.data.users
 import com.leon.su.domain.Roles
 import com.leon.su.domain.UserResponse
 import com.leon.su.presentation.MenuActivity.Companion.openMenu
@@ -62,9 +63,18 @@ class SplashActivity :
                     }
                 } else mViewModel.reloadCurrentUser()
             }.addOnFailureListener {
-                mViewModel.reloadCurrentUser()
+                start()
             }
-        } else mViewModel.reloadCurrentUser()
+        } else start()
+    }
+
+    private fun start() {
+        if (mSharedPreferences.users != null) {
+            mViewModel.reloadCurrentUser()
+        } else {
+            ActivityUtils.finishAllActivities(true)
+            ActivityUtils.startActivity(LoginActivity::class.java)
+        }
     }
 
     override fun onReloadSuccess() {

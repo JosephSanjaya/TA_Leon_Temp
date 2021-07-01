@@ -3,8 +3,6 @@ package com.leon.su.data
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.leon.su.domain.Product
-import com.leon.su.domain.ProductData
-import com.leon.su.domain.ProductResponse
 import com.leon.su.domain.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -13,18 +11,19 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 
 class ProductRepository {
-    suspend fun productReg(product: ProductData) = flow {
+
+    suspend fun insert(added: Product.Data) = flow {
         emit(State.Loading())
-        val request = Firebase.firestore
-            .collection(ProductData.REF)
-            .add(product)
+        val add = Firebase.firestore
+            .collection(Product.REF)
+            .add(added)
             .await()
-        val result = request.get().await()
+        val result = add.get().await()
         emit(
             State.Success(
-                ProductResponse(
+                Product.Response(
                     id = result.id,
-                    data = result.toObject(ProductData::class.java)
+                    product = result.toObject(Product.Data::class.java)
                 )
             )
         )
@@ -32,49 +31,48 @@ class ProductRepository {
         throw it
     }.flowOn(Dispatchers.IO)
 
-    suspend fun getProduct() = flow {
+    suspend fun edit(edited: Product.Response) = flow {
+        if (edited.product == null)
+            throw Throwable("Product tidak ditemukan!")
         emit(State.Loading())
         val request = Firebase.firestore
             .collection(Product.REF)
-            .get()
-        val result = request.await().map {
-            it.toObject(Product.productDetail::class.java)
-        }
-        emit(State.Success(result))
+            .document(edited.id.toString())
+            .set(edited.product!!)
+        request.await()
+        emit(State.Success(true))
     }.catch {
         throw it
     }.flowOn(Dispatchers.IO)
 
-/*    suspend fun productRegOld(namaProduct: String, hGrosir: Double, hEcer: Double, berat: Double) =
-        flow {
-            emit(State.Loading())
-            val push = Firebase.database.reference.child(Product.REF).push()
-            push.setValue(
-                Product.productDetail(
-                    idProduct = push.key,
-                    namaProduct = namaProduct,
-                    hargaGrosir = hGrosir,
-                    hargaEcer = hEcer,
-                    beratProduct = berat
+    suspend fun delete(id: String) = flow {
+        emit(State.Loading())
+        val request = Firebase.firestore
+            .collection(Product.REF)
+            .document(id)
+            .get()
+        request.await()
+        emit(State.Success(true))
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun fetch(status: Product.Status, type: Product.Type) = flow {
+        emit(State.Loading())
+        val result = Firebase.firestore
+            .collection(Product.REF)
+            .whereEqualTo("status", status.value)
+            .whereEqualTo("type", type.value)
+            .get()
+            .await()
+            .map {
+                Product.Response(
+                    id = it.id,
+                    product = it.toObject(Product.Data::class.java)
                 )
-            )
-                .await()
-            emit(State.Success(push.key))
-        }
-
-    suspend fun getProductOld() = callbackFlow {
-        if (this.isActive) offer(State.Loading())
-        val request = Firebase.database.reference.child(Product.REF)
-        request.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                offer(State.Success(snapshot.getValue(Product.productDetail::class.java)))
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                offer(State.Failed(error.toException()))
-            }
-        })
-        awaitClose()
-    }
- */
+        emit(State.Success(result))
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
 }

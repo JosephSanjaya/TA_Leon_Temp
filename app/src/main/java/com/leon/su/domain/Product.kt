@@ -1,36 +1,69 @@
 package com.leon.su.domain
 
-import com.google.firebase.database.PropertyName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 object Product {
     const val REF = "products"
 
-    @Serializable
-    data class productDetail(
-        @PropertyName("id")
-        @SerialName("id")
-        var idProduct: String? = null,
+    enum class Status(val value: String) {
+        DISCONTINUED("discontinued"),
+        ACTIVE("active"),
+        ALL("all"),
+    }
 
-        @PropertyName("namaProduct")
+    enum class Type(val value: String) {
+        MAKANAN("makanan"),
+        MINUMAN("minuman"),
+        LAINNYA("lainnya"),
+        ALL("all"),
+    }
+
+    @Serializable
+    data class Cart(
+        @SerialName("quantity")
+        var quantity: Int = 0,
+
+        @SerialName("total")
+        var total: Double = 0.0,
+
+        @SerialName("product")
+        var product: Double = 0.0,
+    )
+
+    @Serializable
+    data class Response(
+        @SerialName("id")
+        var id: String? = null,
+
+        @SerialName("product")
+        var product: Data? = null,
+    )
+
+    @Serializable
+    data class Data(
         @SerialName("namaProduct")
         var namaProduct: String? = null,
 
-        @PropertyName("hGrosir")
-        @SerialName("hGrosir")
+        @SerialName("hargaGrosir")
         var hargaGrosir: Double = 0.0,
 
-        @PropertyName("hEcer")
-        @SerialName("hEcer")
+        @SerialName("grosirUnit")
+        var grosirUnit: Int = 0,
+
+        @SerialName("hargaEcer")
         var hargaEcer: Double = 0.0,
 
-/*        @PropertyName("berat")
-        @SerialName("berat")
-        var beratProduct: Double = 0.0,
-*/
-        @PropertyName("stok")
+        @SerialName("hargaModal")
+        var hargaModal: Double = 0.0,
+
+        @SerialName("status")
+        var status: String = Status.ACTIVE.value,
+
         @SerialName("stok")
-        var stokProduct: Int = 0
+        var stok: Int = 0,
+
+        @SerialName("type")
+        var type: String? = null,
     )
 }
