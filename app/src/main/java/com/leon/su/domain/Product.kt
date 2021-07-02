@@ -28,7 +28,7 @@ object Product {
         var total: Double = 0.0,
 
         @SerialName("product")
-        var product: Double = 0.0,
+        var product: Data? = null,
     )
 
     @Serializable
