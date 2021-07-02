@@ -45,6 +45,40 @@ class ProductRepository {
         throw it
     }.flowOn(Dispatchers.IO)
 
+    suspend fun sold(sold: List<Product.Cart>) = flow {
+        emit(State.Loading())
+        val existing = Firebase.firestore
+            .collection(Product.REF)
+            .whereEqualTo("status", Product.Status.ACTIVE.value)
+            .get()
+            .await()
+            .map {
+                Product.Response(
+                    id = it.id,
+                    data = it.toObject(Product.Data::class.java)
+                )
+            }
+        sold.filter {
+            it.product != null
+        }.forEach { cart ->
+            val exist = existing.first {
+                it.id == cart.product!!.id
+            }
+            val request = Firebase.firestore
+                .collection(Product.REF)
+                .document(cart.product?.id.toString())
+                .set(
+                    cart.product?.data!!.apply {
+                        stok = (exist.data?.stok ?: 0) - cart.quantity
+                    }
+                )
+            request.await()
+        }
+        emit(State.Success(true))
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
+
     suspend fun delete(id: String) = flow {
         emit(State.Loading())
         val request = Firebase.firestore

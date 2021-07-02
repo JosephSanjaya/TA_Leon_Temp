@@ -81,7 +81,8 @@ class ProductInvoicesTabFragment : Fragment(R.layout.fragment_tab_invoices), Vie
                 appCompatActivity?.replaceFragment(
                     InvoicesFragment(),
                     isAnimate = true,
-                    isBackstack = true
+                    isBackstack = true,
+                    isInclusive = true
                 )
             }
         }

@@ -58,6 +58,22 @@ class ProductObserver(
             }
         }
         owner.lifecycleScope.launch {
+            viewModel.mSold.collect {
+                when (it) {
+                    is State.Idle -> view.onSoldProductIdle()
+                    is State.Loading -> view.onSoldProductLoading()
+                    is State.Success -> {
+                        view.onSoldProductSuccess()
+                        viewModel.resetSoldState()
+                    }
+                    is State.Failed -> {
+                        view.onSoldProductFailed(it.throwable)
+                        viewModel.resetSoldState()
+                    }
+                }
+            }
+        }
+        owner.lifecycleScope.launch {
             viewModel.mFetch.collect {
                 when (it) {
                     is State.Idle -> view.onFetchProductIdle()
@@ -121,6 +137,22 @@ class ProductObserver(
         }
 
         fun onEditProductSuccess() {
+            // Do Nothing
+        }
+
+        fun onSoldProductIdle() {
+            // Do Nothing
+        }
+
+        fun onSoldProductLoading() {
+            // Do Nothing
+        }
+
+        fun onSoldProductFailed(e: Throwable) {
+            // Do Nothing
+        }
+
+        fun onSoldProductSuccess() {
             // Do Nothing
         }
 

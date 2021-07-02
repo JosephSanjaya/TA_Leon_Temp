@@ -49,6 +49,25 @@ class ProductViewModel(
             }
     }
 
+    private val _sold = MutableStateFlow<State<Boolean>>(State.Idle())
+    val mSold: StateFlow<State<Boolean>> get() = _sold
+
+    fun resetSoldState() {
+        _sold.value = State.Idle()
+    }
+
+    fun sold(
+        sold: List<Product.Cart>
+    ) = ioScope.launch {
+        repository.sold(sold)
+            .catch {
+                _sold.emit(State.Failed(it))
+            }
+            .collect {
+                _sold.emit(it)
+            }
+    }
+
     private val _fetch = MutableStateFlow<State<List<Product.Response>>>(State.Idle())
     val mFetch: StateFlow<State<List<Product.Response>>> get() = _fetch
 
