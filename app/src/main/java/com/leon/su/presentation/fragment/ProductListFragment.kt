@@ -8,14 +8,19 @@ package com.leon.su.presentation.fragment
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.ObservableBoolean
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.blankj.utilcode.util.StringUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.leon.su.R
 import com.leon.su.databinding.FragmentListProductBinding
@@ -39,6 +44,10 @@ class ProductListFragment :
     private val mProduct = mutableListOf<Product.Response>()
     private val isLoading = ObservableBoolean(true)
     private val mViewModel by viewModel<ProductViewModel>()
+    private var mQuery = MutableLiveData("")
+    private val mHandler: Handler by lazy {
+        Handler(Looper.getMainLooper())
+    }
     private val mAdapter by lazy {
         ProductListAdapter(layoutInflater, mProduct)
     }
@@ -64,6 +73,25 @@ class ProductListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mQuery.observe(
+            viewLifecycleOwner,
+            {
+                when {
+                    it.isNullOrBlank() || it == "null" ->
+                        mAdapter.reset()
+                    else -> mAdapter.filter(it)
+                }
+            }
+        )
+        mBinding.etSearch.addTextChangedListener {
+            mHandler.removeCallbacksAndMessages(null)
+            mHandler.postDelayed(
+                {
+                    mQuery.postValue(it.toString())
+                },
+                500
+            )
+        }
         mBinding.initAdapter()
         onRefresh()
     }

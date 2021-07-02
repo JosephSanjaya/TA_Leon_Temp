@@ -32,6 +32,27 @@
         <item name="textAppearanceOverline">@style/TextAppearance.Leon.Overline</item>
     </style>
 
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">?android:attr/textColorSecondary</item>
+        <item name="hintTextColor">?android:attr/textColorSecondary</item>
+        <item name="endIconTint">?android:attr/textColorSecondary</item>
+        <item name="android:textColorHint">?android:attr/textColorSecondary</item>
+        <item name="hintTextAppearance">?attr/textAppearanceBody1</item>
+        <item name="shapeAppearanceOverlay">@style/TextInputLayoutShape</item>
+    </style>
+
+    <style name="TextInputEditTextStyle">
+        <item name="colorControlActivated">?attr/colorSecondary</item>
+    </style>
+
+    <style name="TextInputLayoutShape" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">8dp</item>
+        <item name="cornerSizeTopLeft">8dp</item>
+        <item name="cornerSizeBottomRight">8dp</item>
+        <item name="cornerSizeBottomLeft">8dp</item>
+    </style>
+
     <style name="MaterialAlertDialog.Rounded" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialAlertDialog.Rounded</item>
     </style>

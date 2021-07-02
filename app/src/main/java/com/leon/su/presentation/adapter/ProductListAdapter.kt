@@ -33,14 +33,19 @@ class ProductListAdapter(
     }
 
     fun updateData(data: List<Product.Response>) {
-        fullData = data.toMutableList()
-        setNewInstance(data.toMutableList())
+        val added = data.sortedBy {
+            it.product?.namaProduct
+        }.toMutableList()
+        fullData = added
+        setNewInstance(added)
     }
 
     fun reset() = setNewInstance(fullData)
     fun filter(search: String) = setNewInstance(
         fullData.filter {
             it.product?.namaProduct?.contains(search, ignoreCase = true) == true
+        }.sortedBy {
+            it.product?.namaProduct
         }.toMutableList()
     )
 
