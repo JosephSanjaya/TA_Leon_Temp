@@ -95,7 +95,7 @@
                     android:textColor="?attr/colorOnSecondary"
                     android:visibility="@{isCountDownEnabled ? View.GONE : View.VISIBLE}"
                     app:backgroundTint="?attr/colorSecondary"
-                    app:cornerRadius="8dp" />
+                    app:cornerRadius="@dimen/defaultRadius" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnLogout"
@@ -110,7 +110,7 @@
                     android:textColor="?attr/colorOnSecondary"
                     android:visibility="@{isCountDownEnabled ? View.GONE : View.VISIBLE}"
                     app:backgroundTint="?attr/colorSecondary"
-                    app:cornerRadius="8dp" />
+                    app:cornerRadius="@dimen/defaultRadius" />
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

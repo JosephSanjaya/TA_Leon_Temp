@@ -1,5 +1,6 @@
 package com.leon.su.domain
 
+import kotlin.math.floor
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,12 +25,33 @@ object Product {
         @SerialName("quantity")
         var quantity: Int = 0,
 
-        @SerialName("total")
-        var total: Double = 0.0,
-
         @SerialName("product")
-        var product: Data? = null,
-    )
+        var product: Response? = null,
+    ) {
+        fun getEcerGrosir(): Pair<Int, Int> {
+            return if (product?.data?.grosirUnit == 1) {
+                Pair(quantity, 0)
+            } else {
+                val value = quantity.toDouble() / if (product?.data?.grosirUnit == null ||
+                    product?.data?.grosirUnit == 0
+                ) 1.0 else (product?.data?.grosirUnit ?: 1).toDouble()
+                val mult = floor(value)
+                val grosir = mult.toInt()
+                val ecer = quantity - (grosir * (product?.data?.grosirUnit ?: 1))
+                return Pair(ecer, grosir)
+            }
+        }
+
+        fun getTotal(): Double {
+            val ecerGrosir = getEcerGrosir()
+            return if (ecerGrosir.second == 0) {
+                quantity * (product?.data?.hargaEcer ?: 0.0)
+            } else {
+                (ecerGrosir.first * (product?.data?.hargaEcer ?: 0.0)) +
+                    (ecerGrosir.second * (product?.data?.hargaGrosir ?: 0.0))
+            }
+        }
+    }
 
     @Serializable
     data class Response(
@@ -37,7 +59,7 @@ object Product {
         var id: String? = null,
 
         @SerialName("product")
-        var product: Data? = null,
+        var data: Data? = null,
     )
 
     @Serializable

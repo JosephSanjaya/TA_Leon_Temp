@@ -81,6 +81,8 @@ class MenuActivity :
     override fun onClick(v: View?) {
         when (v) {
             mBinding.ProductButton -> ActivityUtils.startActivity(ProductActivity::class.java)
+            mBinding.InvoiceButton ->
+                ActivityUtils.startActivity(ProductInvoicesActivity::class.java)
         }
     }
 

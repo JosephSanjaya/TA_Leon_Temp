@@ -1,0 +1,95 @@
+/*
+ * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
+ * @Github (https://github.com/JosephSanjaya),
+ * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
+ */
+
+package com.leon.su.presentation.adapter
+
+import androidx.databinding.DataBindingUtil
+import com.chad.library.adapter.base.provider.BaseItemProvider
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.leon.su.R
+import com.leon.su.databinding.RowInvoicesBinding
+import com.leon.su.databinding.RowInvoicesHeaderBinding
+import com.leon.su.databinding.RowInvoicesTotalBinding
+import com.leon.su.domain.Product
+import com.leon.su.utils.toRupiah
+import com.soywiz.klock.DateTime
+
+object InvoicesListProvider {
+    enum class Layout(val value: Int) {
+        Header(0),
+        Invoices(1),
+        Total(2),
+    }
+
+    sealed class Type {
+        class Header(val date: DateTime, val nama: String) : Type()
+        class Invoices(val data: Product.Cart) : Type()
+        class Total(val total: Double) : Type()
+    }
+
+    class Header(
+        override val itemViewType: Int = Layout.Header.value,
+        override val layoutId: Int = R.layout.row_invoices_header
+    ) : BaseItemProvider<Type>() {
+        override fun onViewHolderCreated(viewHolder: BaseViewHolder, viewType: Int) {
+            DataBindingUtil.bind<RowInvoicesHeaderBinding>(viewHolder.itemView)
+            super.onViewHolderCreated(viewHolder, viewType)
+        }
+
+        override fun convert(helper: BaseViewHolder, item: Type) {
+            item as Type.Header
+            helper.getBinding<RowInvoicesHeaderBinding>()?.apply {
+                tvUser.text = item.nama
+                tvTanggal.text = item.date.format("dd MMMM yyyy HH:mm:ss")
+            }
+        }
+    }
+
+    class Invoices(
+        override val itemViewType: Int = Layout.Invoices.value,
+        override val layoutId: Int = R.layout.row_invoices
+    ) : BaseItemProvider<Type>() {
+
+        override fun onViewHolderCreated(viewHolder: BaseViewHolder, viewType: Int) {
+            DataBindingUtil.bind<RowInvoicesBinding>(viewHolder.itemView)
+            super.onViewHolderCreated(viewHolder, viewType)
+        }
+
+        override fun convert(helper: BaseViewHolder, item: Type) {
+            item as Type.Invoices
+            helper.getBinding<RowInvoicesBinding>()?.apply {
+                tvNamaProduct.text = item.data.product?.data?.namaProduct
+                val ecerGrosir = item.data.getEcerGrosir()
+                val quantity = when {
+                    ecerGrosir.second == 0 -> "${ecerGrosir.first} pcs"
+                    ecerGrosir.first == 0 -> "${ecerGrosir.second} dus"
+                    else -> "${ecerGrosir.second} dus, ${ecerGrosir.first} pcs"
+                }
+                tvQuantity.text = quantity
+                val total = item.data.getTotal().toRupiah()
+                tvTotal.text = total
+            }
+        }
+    }
+
+    class Total(
+        override val itemViewType: Int = Layout.Total.value,
+        override val layoutId: Int = R.layout.row_invoices_total
+    ) : BaseItemProvider<Type>() {
+
+        override fun onViewHolderCreated(viewHolder: BaseViewHolder, viewType: Int) {
+            DataBindingUtil.bind<RowInvoicesTotalBinding>(viewHolder.itemView)
+            super.onViewHolderCreated(viewHolder, viewType)
+        }
+
+        override fun convert(helper: BaseViewHolder, item: Type) {
+            item as Type.Total
+            helper.getBinding<RowInvoicesTotalBinding>()?.apply {
+                tvTotal.text = item.total.toRupiah()
+            }
+        }
+    }
+}

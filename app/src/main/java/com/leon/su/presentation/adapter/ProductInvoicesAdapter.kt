@@ -22,7 +22,7 @@ class ProductInvoicesAdapter(
     data: MutableList<Product.Cart>
 ) :
     BaseQuickAdapter<Product.Cart, BaseDataBindingHolder<RowProductInvoicesBinding>>(
-        R.layout.row_product,
+        R.layout.row_product_invoices,
         data
     ) {
 
@@ -31,7 +31,7 @@ class ProductInvoicesAdapter(
     init {
         setEmptyView(RowEmptyListBinding.inflate(layoutInflater).root)
         fullData = data
-        animationEnable = true
+        animationEnable = false
         addChildClickViewIds(
             R.id.tvMinusEcer,
             R.id.tvMinusGrosir,
@@ -40,20 +40,41 @@ class ProductInvoicesAdapter(
         )
     }
 
-    fun updateData(data: List<Product.Response>) {
-        val added = data.map {
+    fun updateData(data: List<Product.Response>, current: MutableList<Product.Cart>) {
+        val added = data.map { added ->
             Product.Cart(
-                product = it.product
+                product = added,
+                quantity = current.firstOrNull {
+                    it.product?.id == added.id
+                }?.quantity ?: 0
             )
-        }.toMutableList()
+        }.sortedBy {
+            it.product?.data?.namaProduct
+        }.toMutableList().toMutableList()
         fullData = added
         setNewInstance(added)
     }
 
-    fun reset() = setNewInstance(fullData)
-    fun filter(search: String) = setNewInstance(
+    fun reset(current: MutableList<Product.Cart>) = updateData(
         fullData.filter {
-            it.product?.namaProduct?.contains(search, ignoreCase = true) == true
+            it.product != null
+        }.map {
+            it.product!!
+        },
+        current
+    )
+
+    fun filter(search: String, current: MutableList<Product.Cart>) = setNewInstance(
+        fullData.filter {
+            it.product?.data?.namaProduct?.contains(search, ignoreCase = true) == true
+        }.map { filtered ->
+            filtered.apply {
+                quantity = current.firstOrNull {
+                    filtered.product?.id == it.product?.id
+                }?.quantity ?: 0
+            }
+        }.sortedBy {
+            it.product?.data?.namaProduct
         }.toMutableList()
     )
 
@@ -62,25 +83,30 @@ class ProductInvoicesAdapter(
         item: Product.Cart
     ) {
         holder.dataBinding?.apply {
-            val stok = "Stok: ${item.product?.stok}"
-            tvNamaProduct.text = item.product?.namaProduct
+            val stok = "Stok: ${item.product?.data?.stok}"
+            tvNamaProduct.text = item.product?.data?.namaProduct
             tvStock.text = stok
-            cvEcer.isGone = item.product?.hargaEcer == 0.0
-            cvGrosir.isGone = item.product?.hargaGrosir == 0.0
-            val hargaEcer = "${item.product?.hargaEcer?.toRupiah()} / pcs"
-            val hargaGrosir = "${item.product?.hargaGrosir?.toRupiah()} / dus"
+            cvEcer.isGone = item.product?.data?.hargaEcer == 0.0
+            cvGrosir.isGone = item.product?.data?.hargaGrosir == 0.0
+            val hargaEcer = "${item.product?.data?.hargaEcer?.toRupiah()} / pcs"
+            val hargaGrosir = "${item.product?.data?.hargaGrosir?.toRupiah()} / dus"
+            val perDus = if (item.product?.data?.grosirUnit ?: 0 <= 1) {
+                "(Satuan)"
+            } else {
+                "(${item.product?.data?.grosirUnit ?: 0} pcs per dus)"
+            }
+            tvPerDus.text = perDus
             tvHargaEcer.text = hargaEcer
             tvHargaGrosir.text = hargaGrosir
-            if (item.product?.grosirUnit ?: 0 > 1 &&
-                item.quantity > item.product?.grosirUnit ?: 0
+            if (item.product?.data?.grosirUnit ?: 0 > 1 &&
+                item.quantity >= item.product?.data?.grosirUnit ?: 0
             ) {
-                val mult = floor(item.quantity.toDouble() / (item.product?.grosirUnit ?: 1))
-                val grosir = (item.product?.grosirUnit ?: 1) * mult
-                val ecer = item.quantity - grosir
-                tvQtyEcer.text = ecer.toInt().toString()
-                tvQtyGrosir.text = grosir.toInt().toString()
+                val ecerGrosir = item.getEcerGrosir()
+                tvQtyEcer.text = ecerGrosir.first.toString()
+                tvQtyGrosir.text = ecerGrosir.second.toString()
             } else {
                 tvQtyEcer.text = item.quantity.toString()
+                tvQtyGrosir.text = 0.toString()
             }
         }
     }

@@ -34,7 +34,7 @@ class ProductListAdapter(
 
     fun updateData(data: List<Product.Response>) {
         val added = data.sortedBy {
-            it.product?.namaProduct
+            it.data?.namaProduct
         }.toMutableList()
         fullData = added
         setNewInstance(added)
@@ -43,9 +43,9 @@ class ProductListAdapter(
     fun reset() = setNewInstance(fullData)
     fun filter(search: String) = setNewInstance(
         fullData.filter {
-            it.product?.namaProduct?.contains(search, ignoreCase = true) == true
+            it.data?.namaProduct?.contains(search, ignoreCase = true) == true
         }.sortedBy {
-            it.product?.namaProduct
+            it.data?.namaProduct
         }.toMutableList()
     )
 
@@ -54,11 +54,11 @@ class ProductListAdapter(
         item: Product.Response
     ) {
         holder.dataBinding?.apply {
-            val stok = "Stok: ${item.product?.stok}"
-            tvNamaProduct.text = item.product?.namaProduct
+            val stok = "Stok: ${item.data?.stok}"
+            tvNamaProduct.text = item.data?.namaProduct
             tvStock.text = stok
-            val hargaEcer = "${item.product?.hargaEcer?.toRupiah()} / pcs"
-            val hargaGrosir = "${item.product?.hargaGrosir?.toRupiah()} / dus"
+            val hargaEcer = "${item.data?.hargaEcer?.toRupiah()} / pcs"
+            val hargaGrosir = "${item.data?.hargaGrosir?.toRupiah()} / dus"
             tvHargaEcer.text = hargaEcer
             tvHargaGrosir.text = hargaGrosir
         }

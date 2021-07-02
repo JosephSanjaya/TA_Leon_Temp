@@ -23,7 +23,7 @@ class ProductRepository {
             State.Success(
                 Product.Response(
                     id = result.id,
-                    product = result.toObject(Product.Data::class.java)
+                    data = result.toObject(Product.Data::class.java)
                 )
             )
         )
@@ -32,13 +32,13 @@ class ProductRepository {
     }.flowOn(Dispatchers.IO)
 
     suspend fun edit(edited: Product.Response) = flow {
-        if (edited.product == null)
+        if (edited.data == null)
             throw Throwable("Product tidak ditemukan!")
         emit(State.Loading())
         val request = Firebase.firestore
             .collection(Product.REF)
             .document(edited.id.toString())
-            .set(edited.product!!)
+            .set(edited.data!!)
         request.await()
         emit(State.Success(true))
     }.catch {
@@ -68,7 +68,7 @@ class ProductRepository {
             .map {
                 Product.Response(
                     id = it.id,
-                    product = it.toObject(Product.Data::class.java)
+                    data = it.toObject(Product.Data::class.java)
                 )
             }
         emit(State.Success(result))

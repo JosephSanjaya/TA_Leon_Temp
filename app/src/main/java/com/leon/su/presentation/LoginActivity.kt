@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
+import coil.load
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.google.firebase.auth.FirebaseUser
@@ -36,6 +37,7 @@ class LoginActivity :
         supportActionBar?.title = "Login"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         lifecycle.addObserver(UserObserver(this, mViewModel, this))
+        mBinding.imageView.load(R.drawable.app_icon_tp)
         mBinding.listener = this
     }
 
