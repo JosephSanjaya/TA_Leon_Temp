@@ -1,16 +1,6 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.observer
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import com.leon.su.domain.State
 import com.leon.su.presentation.viewmodel.VerifyViewModel
 import kotlinx.coroutines.flow.collect

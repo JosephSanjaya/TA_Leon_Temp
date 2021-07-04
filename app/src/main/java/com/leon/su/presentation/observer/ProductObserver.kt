@@ -1,16 +1,6 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.observer
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import com.leon.su.domain.Product
 import com.leon.su.domain.State
 import com.leon.su.presentation.viewmodel.ProductViewModel
@@ -58,6 +48,22 @@ class ProductObserver(
             }
         }
         owner.lifecycleScope.launch {
+            viewModel.mGetById.collect {
+                when (it) {
+                    is State.Idle -> view.onGetByIdIdle()
+                    is State.Loading -> view.onGetByIdLoading()
+                    is State.Success -> {
+                        view.onGetByIdSuccess(it.data)
+                        viewModel.resetGetById()
+                    }
+                    is State.Failed -> {
+                        view.onGetByIdFailed(it.throwable)
+                        viewModel.resetGetById()
+                    }
+                }
+            }
+        }
+        owner.lifecycleScope.launch {
             viewModel.mSold.collect {
                 when (it) {
                     is State.Idle -> view.onSoldProductIdle()
@@ -69,6 +75,22 @@ class ProductObserver(
                     is State.Failed -> {
                         view.onSoldProductFailed(it.throwable)
                         viewModel.resetSoldState()
+                    }
+                }
+            }
+        }
+        owner.lifecycleScope.launch {
+            viewModel.mAdd.collect {
+                when (it) {
+                    is State.Idle -> view.onAddProductIdle()
+                    is State.Loading -> view.onAddProductLoading()
+                    is State.Success -> {
+                        view.onAddProductSuccess()
+                        viewModel.resetAddState()
+                    }
+                    is State.Failed -> {
+                        view.onAddProductFailed(it.throwable)
+                        viewModel.resetAddState()
                     }
                 }
             }
@@ -140,6 +162,22 @@ class ProductObserver(
             // Do Nothing
         }
 
+        fun onGetByIdIdle() {
+            // Do Nothing
+        }
+
+        fun onGetByIdLoading() {
+            // Do Nothing
+        }
+
+        fun onGetByIdFailed(e: Throwable) {
+            // Do Nothing
+        }
+
+        fun onGetByIdSuccess(data: Product.Response) {
+            // Do Nothing
+        }
+
         fun onSoldProductIdle() {
             // Do Nothing
         }
@@ -153,6 +191,22 @@ class ProductObserver(
         }
 
         fun onSoldProductSuccess() {
+            // Do Nothing
+        }
+
+        fun onAddProductIdle() {
+            // Do Nothing
+        }
+
+        fun onAddProductLoading() {
+            // Do Nothing
+        }
+
+        fun onAddProductFailed(e: Throwable) {
+            // Do Nothing
+        }
+
+        fun onAddProductSuccess() {
             // Do Nothing
         }
 

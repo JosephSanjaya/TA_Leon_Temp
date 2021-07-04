@@ -1,15 +1,10 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.adapter
 
 import androidx.databinding.DataBindingUtil
 import com.chad.library.adapter.base.provider.BaseItemProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.leon.su.R
+import com.leon.su.databinding.RowInboundBinding
 import com.leon.su.databinding.RowInvoicesBinding
 import com.leon.su.databinding.RowInvoicesHeaderBinding
 import com.leon.su.databinding.RowInvoicesTotalBinding
@@ -21,12 +16,14 @@ object InvoicesListProvider {
     enum class Layout(val value: Int) {
         Header(0),
         Invoices(1),
-        Total(2),
+        Inbound(2),
+        Total(3),
     }
 
     sealed class Type {
         class Header(val date: DateTime, val nama: String) : Type()
         class Invoices(val data: Product.Cart) : Type()
+        class Inbound(val data: Product.Cart) : Type()
         class Total(val total: Double) : Type()
     }
 
@@ -71,6 +68,30 @@ object InvoicesListProvider {
                 tvQuantity.text = quantity
                 val total = item.data.getTotal().toRupiah()
                 tvTotal.text = total
+            }
+        }
+    }
+    class Inbound(
+        override val itemViewType: Int = Layout.Inbound.value,
+        override val layoutId: Int = R.layout.row_inbound
+    ) : BaseItemProvider<Type>() {
+
+        override fun onViewHolderCreated(viewHolder: BaseViewHolder, viewType: Int) {
+            DataBindingUtil.bind<RowInboundBinding>(viewHolder.itemView)
+            super.onViewHolderCreated(viewHolder, viewType)
+        }
+
+        override fun convert(helper: BaseViewHolder, item: Type) {
+            item as Type.Inbound
+            helper.getBinding<RowInboundBinding>()?.apply {
+                tvNamaProduct.text = item.data.product?.data?.namaProduct
+                val ecerGrosir = item.data.getEcerGrosir()
+                val quantity = when {
+                    ecerGrosir.second == 0 -> "${ecerGrosir.first} pcs"
+                    ecerGrosir.first == 0 -> "${ecerGrosir.second} dus"
+                    else -> "${ecerGrosir.second} dus, ${ecerGrosir.first} pcs"
+                }
+                tvQuantity.text = quantity
             }
         }
     }

@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.fragment
 
 import android.content.Intent
@@ -25,7 +19,6 @@ import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.gkemon.XMLtoPDF.model.SuccessResponse
 import com.leon.su.R
-import com.leon.su.data.ProductRepository
 import com.leon.su.data.users
 import com.leon.su.databinding.FragmentInvoicesBinding
 import com.leon.su.presentation.adapter.InvoicesListAdapter
@@ -68,7 +61,26 @@ class InvoicesFragment :
         super.onViewCreated(view, savedInstanceState)
         mBinding.rvContent.adapter = mAdapter
         mBinding.listener = this
-        mViewModel.sold(mSharedViewModel.mCartItem)
+        val data = mutableListOf<InvoicesListProvider.Type>()
+        data.add(
+            InvoicesListProvider.Type.Header(
+                DateTime.nowLocal().local,
+                mSharedPreferences.users?.data?.nama.toString()
+            )
+        )
+        data.addAll(
+            mSharedViewModel.mCartItem.map {
+                InvoicesListProvider.Type.Invoices(it)
+            }
+        )
+        data.add(
+            InvoicesListProvider.Type.Total(
+                mSharedViewModel.mCartItem.sumOf {
+                    it.getTotal()
+                }
+            )
+        )
+        mAdapter.setNewInstance(data)
     }
 
     private fun generatePDF() {
@@ -89,6 +101,7 @@ class InvoicesFragment :
                         if (type == null) type = "*/*"
                         viewFile.setDataAndType(UriUtils.file2Uri(response?.file), type)
                         startActivity(viewFile)
+                        activity?.finish()
                     } catch (e: Throwable) {
                         ToastUtils.showShort(e.message)
                     }
@@ -117,27 +130,7 @@ class InvoicesFragment :
 
     override fun onSoldProductSuccess() {
         super.onSoldProductSuccess()
-        val data = mutableListOf<InvoicesListProvider.Type>()
-        data.add(
-            InvoicesListProvider.Type.Header(
-                DateTime.now(),
-                mSharedPreferences.users?.data?.nama.toString()
-            )
-        )
-        data.addAll(
-            mSharedViewModel.mCartItem.map {
-                InvoicesListProvider.Type.Invoices(it)
-            }
-        )
-        data.add(
-            InvoicesListProvider.Type.Total(
-                mSharedViewModel.mCartItem.sumOf {
-                    it.getTotal()
-                }
-            )
-        )
-        mAdapter.setNewInstance(data)
-        loading?.dismiss()
+        generatePDF()
     }
 
     override fun onClick(v: View?): Unit = with(mBinding) {
@@ -146,7 +139,7 @@ class InvoicesFragment :
                 PermissionConstants.STORAGE
             ).callback(object : PermissionUtils.SimpleCallback {
                 override fun onGranted() {
-                    generatePDF()
+                    mViewModel.sold(mSharedViewModel.mCartItem)
                 }
 
                 override fun onDenied() {

@@ -1,8 +1,8 @@
 package com.leon.su.domain
 
-import kotlin.math.floor
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.math.floor
 
 object Product {
     const val REF = "products"
@@ -28,6 +28,11 @@ object Product {
         @SerialName("product")
         var product: Response? = null,
     ) {
+        /**
+         * @return Pair
+         * - first = nilai ecer
+         * - second = nilai grosir
+         */
         fun getEcerGrosir(): Pair<Int, Int> {
             return if (product?.data?.grosirUnit == 1) {
                 Pair(quantity, 0)

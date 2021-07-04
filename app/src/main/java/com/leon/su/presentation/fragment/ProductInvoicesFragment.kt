@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.fragment
 
 import android.os.Bundle
@@ -42,6 +36,7 @@ class ProductInvoicesFragment :
     private val mType: String by bundle(TYPE_KEY, Product.Type.MAKANAN.value)
     private val mBinding by viewBinding(FragmentListProductInvoicesBinding::bind)
     private val mProduct = mutableListOf<Product.Cart>()
+    private val isTambah: Boolean by bundle(TAMBAH_KEY, false)
     private val isLoading = ObservableBoolean(true)
     private val mViewModel by viewModel<ProductViewModel>()
     private val mSharedViewModel by activityViewModels<InvoicesActivityViewModel>()
@@ -131,9 +126,12 @@ class ProductInvoicesFragment :
 
     companion object {
         const val TYPE_KEY = "key"
-        fun newInstance(type: Product.Type) = ProductInvoicesFragment().apply {
+        const val TAMBAH_KEY = "tambah"
+        fun newInstance(type: Product.Type,
+                        isTambah: Boolean = false) = ProductInvoicesFragment().apply {
             arguments = intentOf {
                 +(TYPE_KEY to type.value)
+                +(TAMBAH_KEY to isTambah)
             }.extras
         }
     }
@@ -142,8 +140,8 @@ class ProductInvoicesFragment :
         if (adapter is ProductInvoicesAdapter) {
             val selected = adapter.getItem(position)
             when (view.id) {
-                R.id.tvPlusEcer -> if ((selected.quantity + 1) >
-                    selected.product?.data?.stok ?: 0
+                R.id.tvPlusEcer -> if (!isTambah && ((selected.quantity + 1) >
+                    selected.product?.data?.stok ?: 0)
                 ) {
                     ToastUtils.showShort("Stok tidak cukup!")
                 } else {
@@ -166,12 +164,12 @@ class ProductInvoicesFragment :
                         item
                     )
                 }
-                R.id.tvPlusGrosir -> if ((
+                R.id.tvPlusGrosir -> if (!isTambah && ((
                     selected.quantity + (
                         selected.product?.data?.grosirUnit
                             ?: 0
                         )
-                    ) > selected.product?.data?.stok ?: 0
+                    ) > selected.product?.data?.stok ?: 0)
                 ) {
                     ToastUtils.showShort("Stok tidak cukup!")
                 } else {

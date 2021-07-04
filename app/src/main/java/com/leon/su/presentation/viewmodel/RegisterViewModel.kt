@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.viewmodel
 
 import com.google.firebase.auth.FirebaseUser
@@ -33,7 +27,7 @@ class RegisterViewModel(
             .collect { _register.emit(it) }
     }
 
-    fun registerAdmin(creatorPassword: String, data: UserData, password: String) =
+    fun registerPegawai(creatorPassword: String, data: UserData, password: String) =
         ioScope.launch {
             repository.registerPegawai(creatorPassword, data, password)
                 .catch { _register.emit(State.Failed(it)) }

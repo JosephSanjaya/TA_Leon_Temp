@@ -1,18 +1,12 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.utils
 
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.util.*
 import org.joda.money.CurrencyUnit
 import org.joda.money.Money
 import org.joda.money.format.MoneyFormatter
 import org.joda.money.format.MoneyFormatterBuilder
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.*
 
 fun getRupiahFormatter(): MoneyFormatter = MoneyFormatterBuilder()
     .appendCurrencySymbolLocalized()

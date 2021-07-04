@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.adapter
 
 import android.view.LayoutInflater
@@ -15,7 +9,6 @@ import com.leon.su.databinding.RowEmptyListBinding
 import com.leon.su.databinding.RowProductInvoicesBinding
 import com.leon.su.domain.Product
 import com.leon.su.utils.toRupiah
-import kotlin.math.floor
 
 class ProductInvoicesAdapter(
     layoutInflater: LayoutInflater,

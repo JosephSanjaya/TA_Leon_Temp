@@ -49,6 +49,25 @@ class ProductViewModel(
             }
     }
 
+    private val _getById = MutableStateFlow<State<Product.Response>>(State.Idle())
+    val mGetById: StateFlow<State<Product.Response>> get() = _getById
+
+    fun resetGetById() {
+        _getById.value = State.Idle()
+    }
+
+    fun getById(
+        id: String
+    ) = ioScope.launch {
+        repository.getById(id)
+            .catch {
+                _getById.emit(State.Failed(it))
+            }
+            .collect {
+                _getById.emit(it)
+            }
+    }
+
     private val _sold = MutableStateFlow<State<Boolean>>(State.Idle())
     val mSold: StateFlow<State<Boolean>> get() = _sold
 
@@ -68,11 +87,40 @@ class ProductViewModel(
             }
     }
 
+    private val _add = MutableStateFlow<State<Boolean>>(State.Idle())
+    val mAdd: StateFlow<State<Boolean>> get() = _add
+
+    fun resetAddState() {
+        _add.value = State.Idle()
+    }
+
+    fun add(
+        add: List<Product.Cart>
+    ) = ioScope.launch {
+        repository.add(add)
+            .catch {
+                _add.emit(State.Failed(it))
+            }
+            .collect {
+                _add.emit(it)
+            }
+    }
+
     private val _fetch = MutableStateFlow<State<List<Product.Response>>>(State.Idle())
     val mFetch: StateFlow<State<List<Product.Response>>> get() = _fetch
 
     fun resetFetchState() {
         _fetch.value = State.Idle()
+    }
+
+    fun fetchAll(type: Product.Type) = defaultScope.launch {
+        repository.fetchAll(type)
+            .catch {
+                _fetch.emit(State.Failed(it))
+            }
+            .collect {
+                _fetch.emit(it)
+            }
     }
 
     fun fetch(status: Product.Status, type: Product.Type) = defaultScope.launch {

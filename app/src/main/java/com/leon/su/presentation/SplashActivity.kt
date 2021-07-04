@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation
 
 import android.content.SharedPreferences
@@ -126,7 +120,6 @@ class SplashActivity :
 
     override fun onVerifyCodePasswordSuccess(code: String) {
         ToastUtils.showShort("Kode verifikasi diterima!")
-        // TODO PasswordActivity.launchConfirmReset(code)
         ActivityUtils.finishAllActivities(true)
         super.onVerifyCodePasswordSuccess(code)
     }

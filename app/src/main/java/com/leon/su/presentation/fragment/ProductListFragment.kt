@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.fragment
 
 import android.app.Activity
@@ -14,17 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.ObservableBoolean
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.blankj.utilcode.util.StringUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.leon.su.R
 import com.leon.su.databinding.FragmentListProductBinding
 import com.leon.su.domain.Product
+import com.leon.su.presentation.EditFormProductActivity.Companion.intentEditProduct
 import com.leon.su.presentation.ProductRegisterActivity.Companion.intentAddProduct
 import com.leon.su.presentation.adapter.ProductListAdapter
 import com.leon.su.presentation.observer.ProductObserver
@@ -37,9 +34,11 @@ class ProductListFragment :
     Fragment(R.layout.fragment_list_product),
     SwipeRefreshLayout.OnRefreshListener,
     ProductObserver.Interfaces,
+    OnItemClickListener,
     View.OnClickListener {
 
     private val mType: String by bundle(TYPE_KEY, Product.Type.MAKANAN.value)
+    private val isEdit: Boolean by bundle(EDIT_KEY, false)
     private val mBinding by viewBinding(FragmentListProductBinding::bind)
     private val mProduct = mutableListOf<Product.Response>()
     private val isLoading = ObservableBoolean(true)
@@ -49,7 +48,9 @@ class ProductListFragment :
         Handler(Looper.getMainLooper())
     }
     private val mAdapter by lazy {
-        ProductListAdapter(layoutInflater, mProduct)
+        ProductListAdapter(layoutInflater, mProduct).apply {
+            if (isEdit) setOnItemClickListener(this@ProductListFragment)
+        }
     }
     private val addActivity =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -73,6 +74,7 @@ class ProductListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mBinding.btnAdd.isGone = isEdit
         mQuery.observe(
             viewLifecycleOwner,
             {
@@ -119,7 +121,7 @@ class ProductListFragment :
     }
 
     override fun onRefresh() {
-        mViewModel.fetch(Product.Status.ACTIVE, getType())
+        mViewModel.fetchAll(getType())
     }
 
     override fun onFetchProductLoading() {
@@ -143,10 +145,19 @@ class ProductListFragment :
 
     companion object {
         const val TYPE_KEY = "key"
-        fun newInstance(type: Product.Type) = ProductListFragment().apply {
+        const val EDIT_KEY = "edit"
+        fun newInstance(type: Product.Type, isEdit: Boolean = false) = ProductListFragment().apply {
             arguments = intentOf {
                 +(TYPE_KEY to type.value)
+                +(EDIT_KEY to isEdit)
             }.extras
+        }
+    }
+
+    override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
+        if (adapter is ProductListAdapter) {
+            val selected = adapter.getItem(position)
+            addActivity.launch(requireContext().intentEditProduct(selected.id.toString()))
         }
     }
 }

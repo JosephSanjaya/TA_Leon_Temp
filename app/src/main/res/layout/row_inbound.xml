@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
+        android:background="?android:attr/colorBackground">
+
+        <TextView
+            android:id="@+id/tvNamaProduct"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="start|center_vertical"
+            android:singleLine="true"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tvQuantity"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Nabati" />
+
+        <TextView
+            android:id="@+id/tvQuantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:singleLine="true"
+            android:textAppearance="?attr/textAppearanceBody2"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toEndOf="@+id/tvNamaProduct"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="8 pcs, 3 dus" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

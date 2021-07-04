@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ToastUtils
 import com.leon.su.R
 import com.leon.su.databinding.ActivityMenuBinding
+import com.leon.su.presentation.ProductInvoicesActivity.Companion.launchInvoices
 import com.leon.su.presentation.observer.UserObserver
 import com.leon.su.presentation.viewmodel.UserViewModel
 import com.leon.su.utils.makeLoadingDialog
@@ -29,7 +30,6 @@ class MenuActivity :
         makeLoadingDialog(false)
     }
 
-    // TODO check isAdmin to disable several menu
     private val isAdmin: Boolean by bundle(IS_ADMIN_KEY, true)
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -53,6 +53,10 @@ class MenuActivity :
             setDisplayHomeAsUpEnabled(true)
         }
         mBinding.listener = this
+        if (!isAdmin) {
+            mBinding.uRegisterButton.visibility = View.GONE
+            mBinding.PriceButton.visibility = View.GONE
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -80,9 +84,14 @@ class MenuActivity :
 
     override fun onClick(v: View?) {
         when (v) {
-            mBinding.ProductButton -> ActivityUtils.startActivity(ProductActivity::class.java)
-            mBinding.InvoiceButton ->
-                ActivityUtils.startActivity(ProductInvoicesActivity::class.java)
+            mBinding.ProductButton ->
+                ActivityUtils.startActivity(ProductActivity::class.java)
+            mBinding.PriceButton ->
+                ActivityUtils.startActivity(EditProductActivity::class.java)
+            mBinding.InvoiceButton -> launchInvoices(false)
+            mBinding.StockButton -> launchInvoices(true)
+            mBinding.uRegisterButton ->
+                ActivityUtils.startActivity(RegisterPegawaiActivity::class.java)
         }
     }
 

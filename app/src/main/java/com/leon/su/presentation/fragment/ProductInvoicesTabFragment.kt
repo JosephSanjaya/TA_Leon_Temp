@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2021 Designed and developed by Joseph Sanjaya, S.T., M.Kom., All Rights Reserved.
- * @Github (https://github.com/JosephSanjaya),
- * @LinkedIn (https://www.linkedin.com/in/josephsanjaya/))
- */
-
 package com.leon.su.presentation.fragment
 
 import android.os.Bundle
@@ -20,10 +14,13 @@ import com.leon.su.domain.Product
 import com.leon.su.presentation.viewmodel.InvoicesActivityViewModel
 import com.leon.su.utils.appCompatActivity
 import com.leon.su.utils.replaceFragment
+import com.skydoves.bundler.bundle
+import com.skydoves.bundler.intentOf
 
 class ProductInvoicesTabFragment : Fragment(R.layout.fragment_tab_invoices), View.OnClickListener {
     private val mBinding by viewBinding(FragmentTabInvoicesBinding::bind)
     private var mTabLayoutMediator: TabLayoutMediator? = null
+    private val isTambah: Boolean by bundle(TAMBAH_KEY, false)
     private val mSharedViewModel by activityViewModels<InvoicesActivityViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,13 +35,16 @@ class ProductInvoicesTabFragment : Fragment(R.layout.fragment_tab_invoices), Vie
     }
 
     private fun FragmentTabInvoicesBinding.setupBinding() {
+        if(isTambah){
+            btnCreateInvoices.text = "Tambah Stok"
+        }
         vpContent.apply {
             adapter = object : FragmentStateAdapter(childFragmentManager, lifecycle) {
                 override fun createFragment(position: Int): Fragment {
                     return when (position) {
-                        0 -> ProductInvoicesFragment.newInstance(Product.Type.MAKANAN)
-                        1 -> ProductInvoicesFragment.newInstance(Product.Type.MINUMAN)
-                        else -> ProductInvoicesFragment.newInstance(Product.Type.LAINNYA)
+                        0 -> ProductInvoicesFragment.newInstance(Product.Type.MAKANAN, isTambah)
+                        1 -> ProductInvoicesFragment.newInstance(Product.Type.MINUMAN, isTambah)
+                        else -> ProductInvoicesFragment.newInstance(Product.Type.LAINNYA, isTambah)
                     }
                 }
 
@@ -78,13 +78,31 @@ class ProductInvoicesTabFragment : Fragment(R.layout.fragment_tab_invoices), Vie
             btnCreateInvoices -> if (mSharedViewModel.mCartItem.isNullOrEmpty()) {
                 ToastUtils.showShort("Mohon mengisi produk terlebih dahulu!")
             } else {
-                appCompatActivity?.replaceFragment(
-                    InvoicesFragment(),
-                    isAnimate = true,
-                    isBackstack = true,
-                    isInclusive = true
-                )
+                if (isTambah) {
+                    appCompatActivity?.replaceFragment(
+                        InboundFragment(),
+                        isAnimate = true,
+                        isBackstack = true,
+                        isInclusive = true
+                    )
+                } else {
+                    appCompatActivity?.replaceFragment(
+                        InvoicesFragment(),
+                        isAnimate = true,
+                        isBackstack = true,
+                        isInclusive = true
+                    )
+                }
             }
+        }
+    }
+
+    companion object {
+        const val TAMBAH_KEY = "tambah"
+        fun newInstance(isTambah: Boolean = false) = ProductInvoicesTabFragment().apply {
+            arguments = intentOf {
+                +(TAMBAH_KEY to isTambah)
+            }.extras
         }
     }
 }

@@ -39,7 +39,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNamaToko"
-            tools:text="Joseph Sanjaya, S.T., M.Kom." />
+            tools:text="Leon Karsten" />
 
         <TextView
             android:id="@+id/tvTanggal"
@@ -54,7 +54,7 @@
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUser"
-            tools:text="18 Agustus 2020" />
+            tools:text="9 Juli 2021" />
 
         <View
             android:id="@+id/line"
