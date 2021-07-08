@@ -102,11 +102,28 @@
                 android:onClick="@{listener}"
                 android:text="@string/uregister_button"
                 android:textSize="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tbStatus"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ProductButton"
                 app:layout_constraintVertical_chainStyle="packed" />
+
+            <ToggleButton
+                android:id="@+id/tbStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
+                android:textOff="Tutup"
+                android:textOn="Buka"
+                android:onClick="@{listener}"
+                app:layout_constraintTop_toBottomOf="@+id/uRegisterButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

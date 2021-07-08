@@ -1,8 +1,6 @@
 package com.leon.su.presentation
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -12,6 +10,7 @@ import com.blankj.utilcode.util.ToastUtils
 import com.google.firebase.auth.FirebaseUser
 import com.leon.su.R
 import com.leon.su.databinding.ActivityMainBinding
+import com.leon.su.domain.Flags
 import com.leon.su.domain.Roles
 import com.leon.su.domain.UserResponse
 import com.leon.su.presentation.MenuActivity.Companion.openMenu
@@ -54,6 +53,9 @@ class LoginActivity :
                     mBinding.etPassword.text.toString()
                 )
             }
+            mBinding.btnForgotPassword -> ActivityUtils.startActivity(
+                ForgotPasswordSendActivity::class.java
+            )
         }
     }
 
@@ -78,11 +80,18 @@ class LoginActivity :
         super.onLoginFailed(e)
     }
 
-    override fun onGetUserDataSuccess(user: UserResponse?) {
+    override fun onGetUserDataSuccess(user: UserResponse?, flags: Flags?) {
         loading.dismiss()
         ActivityUtils.finishAllActivities()
-        openMenu(user?.data?.roles == Roles.ADMIN.value)
-        super.onGetUserDataSuccess(user)
+        when (val isAdmin = user?.data?.roles == Roles.ADMIN.value) {
+            true -> openMenu(isAdmin)
+            else -> if (flags?.open == true) {
+                openMenu(isAdmin)
+            } else {
+                ToastUtils.showShort("Mohon maaf, toko sedang tutup!")
+            }
+        }
+        super.onGetUserDataSuccess(user, flags)
     }
 
     override fun onGetUserDataFailed(e: Throwable) {

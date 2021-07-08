@@ -1,40 +1,39 @@
 package com.leon.su.presentation.fragment
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blankj.utilcode.constant.PermissionConstants
-import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.PermissionUtils
 import com.blankj.utilcode.util.ToastUtils
-import com.blankj.utilcode.util.UriUtils
-import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.gkemon.XMLtoPDF.model.SuccessResponse
 import com.leon.su.R
 import com.leon.su.data.users
 import com.leon.su.databinding.FragmentInvoicesBinding
+import com.leon.su.domain.PDFType
 import com.leon.su.presentation.adapter.InvoicesListAdapter
 import com.leon.su.presentation.adapter.InvoicesListProvider
 import com.leon.su.presentation.observer.ProductObserver
 import com.leon.su.presentation.viewmodel.InvoicesActivityViewModel
 import com.leon.su.presentation.viewmodel.ProductViewModel
+import com.leon.su.utils.createPDF
 import com.leon.su.utils.makeLoadingDialog
-import com.soywiz.klock.DateFormat
+import com.leon.su.utils.uploadPDF
 import com.soywiz.klock.DateTime
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InvoicesFragment :
     Fragment(R.layout.fragment_invoices),
-    View.OnClickListener, ProductObserver.Interfaces {
+    View.OnClickListener,
+    ProductObserver.Interfaces {
 
     private val mBinding by viewBinding(FragmentInvoicesBinding::bind)
     private val mSharedViewModel by activityViewModels<InvoicesActivityViewModel>()
@@ -83,40 +82,6 @@ class InvoicesFragment :
         mAdapter.setNewInstance(data)
     }
 
-    private fun generatePDF() {
-        PdfGenerator.getBuilder().setContext(requireContext())
-            .fromViewSource()
-            .fromView(mBinding.nsvContent)
-            .setFileName(DateTime.now().format(DateFormat.DEFAULT_FORMAT))
-            .setFolderName(PathUtils.getInternalAppDataPath())
-            .openPDFafterGeneration(true)
-            .build(object : PdfGeneratorListener() {
-                override fun onSuccess(response: SuccessResponse?) {
-                    super.onSuccess(response)
-                    try {
-                        val viewFile = Intent(Intent.ACTION_VIEW)
-                        val map = MimeTypeMap.getSingleton()
-                        val ext = MimeTypeMap.getFileExtensionFromUrl(response?.file?.name)
-                        var type = map.getMimeTypeFromExtension(ext)
-                        if (type == null) type = "*/*"
-                        viewFile.setDataAndType(UriUtils.file2Uri(response?.file), type)
-                        startActivity(viewFile)
-                        activity?.finish()
-                    } catch (e: Throwable) {
-                        ToastUtils.showShort(e.message)
-                    }
-                }
-
-                override fun onStartPDFGeneration() {
-                    loading?.show()
-                }
-
-                override fun onFinishPDFGeneration() {
-                    loading?.dismiss()
-                }
-            })
-    }
-
     override fun onSoldProductLoading() {
         super.onSoldProductLoading()
         loading?.show()
@@ -130,7 +95,34 @@ class InvoicesFragment :
 
     override fun onSoldProductSuccess() {
         super.onSoldProductSuccess()
-        generatePDF()
+        requireContext().createPDF(
+            mBinding.nsvContent,
+            object : PdfGeneratorListener() {
+                override fun onSuccess(response: SuccessResponse?) {
+                    loading?.show()
+                    if (response?.file != null) {
+                        lifecycleScope.launchWhenResumed {
+                            mSharedPreferences.uploadPDF(response.file, PDFType.INVOICES) {
+                                loading?.dismiss()
+                                super.onSuccess(response)
+                                activity?.finish()
+                            }
+                        }
+                    } else {
+                        loading?.dismiss()
+                        activity?.finish()
+                    }
+                }
+
+                override fun onStartPDFGeneration() {
+                    loading?.show()
+                }
+
+                override fun onFinishPDFGeneration() {
+                    loading?.dismiss()
+                }
+            }
+        )
     }
 
     override fun onClick(v: View?): Unit = with(mBinding) {

@@ -2,6 +2,7 @@ package com.leon.su.presentation.viewmodel
 
 import com.google.firebase.auth.FirebaseUser
 import com.leon.su.data.UserRepository
+import com.leon.su.domain.Flags
 import com.leon.su.domain.State
 import com.leon.su.domain.UserResponse
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,8 +51,8 @@ class UserViewModel(
             .collect { _reload.emit(it) }
     }
 
-    private val _user = MutableStateFlow<State<UserResponse>>(State.Idle())
-    val mUser: StateFlow<State<UserResponse>> get() = _user
+    private val _user = MutableStateFlow<State<Pair<UserResponse, Flags?>>>(State.Idle())
+    val mUser: StateFlow<State<Pair<UserResponse, Flags?>>> get() = _user
 
     fun resetGetUserData() {
         _user.value = State.Idle()
@@ -88,6 +89,23 @@ class UserViewModel(
             }
             .collect {
                 _delete.emit(it)
+            }
+    }
+
+    private val _flags = MutableStateFlow<State<Boolean>>(State.Idle())
+    val mFlags: StateFlow<State<Boolean>> get() = _flags
+
+    fun resetFlagsState() {
+        _flags.value = State.Idle()
+    }
+
+    fun setFlags(flags: Flags) = ioScope.launch {
+        repository.setFlags(flags)
+            .catch {
+                _flags.emit(State.Failed(it))
+            }
+            .collect {
+                _flags.emit(it)
             }
     }
 }

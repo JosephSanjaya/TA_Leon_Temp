@@ -11,9 +11,11 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
 import com.leon.su.R
 import com.leon.su.data.users
+import com.leon.su.domain.Flags
 import com.leon.su.domain.Roles
 import com.leon.su.domain.UserResponse
 import com.leon.su.presentation.MenuActivity.Companion.openMenu
+import com.leon.su.presentation.NewPasswordActivity.Companion.launchNewPassword
 import com.leon.su.presentation.observer.PasswordObserver
 import com.leon.su.presentation.observer.UserObserver
 import com.leon.su.presentation.observer.VerifyObserver
@@ -89,14 +91,22 @@ class SplashActivity :
         super.onReloadFailed(e)
     }
 
-    override fun onGetUserDataSuccess(user: UserResponse?) {
+    override fun onGetUserDataSuccess(user: UserResponse?, flags: Flags?) {
         if (mCurrentUser != null) {
-            next(user?.data?.roles == Roles.ADMIN.value)
+            when (val isAdmin = user?.data?.roles == Roles.ADMIN.value) {
+                true -> next(isAdmin)
+                else -> if (flags?.open == true) {
+                    next(isAdmin)
+                } else {
+                    ToastUtils.showShort("Mohon maaf, toko sedang tutup!")
+                    finish()
+                }
+            }
         } else {
             ActivityUtils.finishAllActivities(true)
             ActivityUtils.startActivity(LoginActivity::class.java)
         }
-        super.onGetUserDataSuccess(user)
+        super.onGetUserDataSuccess(user, flags)
     }
 
     override fun onGetUserDataFailed(e: Throwable) {
@@ -121,6 +131,7 @@ class SplashActivity :
     override fun onVerifyCodePasswordSuccess(code: String) {
         ToastUtils.showShort("Kode verifikasi diterima!")
         ActivityUtils.finishAllActivities(true)
+        launchNewPassword(code)
         super.onVerifyCodePasswordSuccess(code)
     }
 

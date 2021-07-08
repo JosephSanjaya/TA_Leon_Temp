@@ -9,12 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.blankj.utilcode.util.ActivityUtils
 import com.blankj.utilcode.util.ToastUtils
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.leon.su.R
 import com.leon.su.databinding.ActivityMenuBinding
+import com.leon.su.domain.Flags
+import com.leon.su.domain.UserResponse
 import com.leon.su.presentation.ProductInvoicesActivity.Companion.launchInvoices
 import com.leon.su.presentation.observer.UserObserver
 import com.leon.su.presentation.viewmodel.UserViewModel
 import com.leon.su.utils.makeLoadingDialog
+import com.leon.su.utils.setButtonStatus
 import com.skydoves.bundler.bundle
 import com.skydoves.bundler.intentOf
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -57,11 +62,33 @@ class MenuActivity :
             mBinding.uRegisterButton.visibility = View.GONE
             mBinding.PriceButton.visibility = View.GONE
         }
+        mViewModel.getUserData(Firebase.auth.uid.toString())
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    override fun onGetUserDataLoading() {
+        super.onGetUserDataLoading()
+        mLoading.show()
+    }
+
+    override fun onGetUserDataFailed(e: Throwable) {
+        super.onGetUserDataFailed(e)
+        ToastUtils.showShort(e.message)
+        mLoading.dismiss()
+    }
+
+    override fun onGetUserDataSuccess(user: UserResponse?, flags: Flags?) {
+        super.onGetUserDataSuccess(user, flags)
+        supportActionBar?.apply {
+            title = "Welcome, ${user?.data?.nama}"
+            setDisplayHomeAsUpEnabled(true)
+        }
+        mBinding.tbStatus.setButtonStatus(flags?.open == true)
+        mLoading.dismiss()
     }
 
     override fun onLogoutLoading() {
@@ -82,6 +109,27 @@ class MenuActivity :
         super.onLogoutSuccess()
     }
 
+    override fun onSetFlagsLoading() {
+        super.onSetFlagsLoading()
+        mLoading.show()
+    }
+
+    override fun onSetFlagsSuccess() {
+        super.onSetFlagsSuccess()
+        mBinding.tbStatus.setButtonStatus(mBinding.tbStatus.isChecked)
+        ToastUtils.showShort(
+            if (mBinding.tbStatus.isChecked)
+                "Toko dibuka!" else "Toko ditutup!"
+        )
+        mLoading.dismiss()
+    }
+
+    override fun onSetFlagsFailed(e: Throwable) {
+        super.onSetFlagsFailed(e)
+        ToastUtils.showShort(e.message)
+        mLoading.dismiss()
+    }
+
     override fun onClick(v: View?) {
         when (v) {
             mBinding.ProductButton ->
@@ -92,6 +140,11 @@ class MenuActivity :
             mBinding.StockButton -> launchInvoices(true)
             mBinding.uRegisterButton ->
                 ActivityUtils.startActivity(RegisterPegawaiActivity::class.java)
+            mBinding.tbStatus -> mViewModel.setFlags(
+                Flags(
+                    open = mBinding.tbStatus.isChecked
+                )
+            )
         }
     }
 

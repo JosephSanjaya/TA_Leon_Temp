@@ -2,6 +2,7 @@
     <string name="app_name">Toko Sumber Ulum App</string>
     <string name="et_email">Email</string>
     <string name="et_password">Password</string>
+    <string name="et_password_confirm">Ulangi Password</string>
     <string name="login_button">Masuk</string>
     <string name="invoice_button">Buat Invoice Baru</string>
     <string name="stock_button">Barang Masuk</string>
@@ -18,8 +19,12 @@
     <string name="weight">Berat Produk</string>
     <string name="stock">Stok</string>
     <string name="label_verifikasi_desc">Verifikasi akun telah dikirimkan melalui email.</string>
+    <string name="label_forgot_desc">Email reset password akan dikirimkan ke email:</string>
+    <string name="label_forgot_confirm_desc">Silahkan masukkan password baru anda!</string>
     <string name="label_button_retry">Coba Lagi</string>
     <string name="label_button_logout">Keluar</string>
+    <string name="label_button_send">Kirim</string>
+    <string name="label_button_forgot_password">Lupa Password?</string>
     <string name="label_loading">Loading…</string>
 
     <string-array name="product_type">

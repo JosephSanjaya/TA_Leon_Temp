@@ -18,6 +18,12 @@
             android:name=".presentation.ProductRegisterActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".presentation.ForgotPasswordSendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.NewPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".presentation.ProductInvoicesActivity"
             android:screenOrientation="portrait" />
         <activity

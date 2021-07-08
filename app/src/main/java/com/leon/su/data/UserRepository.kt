@@ -5,6 +5,7 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.leon.su.domain.Flags
 import com.leon.su.domain.State
 import com.leon.su.domain.UserData
 import com.leon.su.domain.UserResponse
@@ -23,6 +24,12 @@ class UserRepository(
 
     suspend fun getUserData(userUID: String) = flow {
         emit(State.Loading())
+        val requestFlag = Firebase.firestore
+            .collection(Flags.REF)
+            .document(Flags.DEFAULT)
+            .get()
+            .await()
+        val resultFlag = requestFlag.toObject(Flags::class.java)
         val request = Firebase.firestore
             .collection(UserData.REF)
             .document(userUID)
@@ -33,7 +40,7 @@ class UserRepository(
             data = request.toObject(UserData::class.java)
         )
         mSharedPreferences.users = result
-        emit(State.Success(result))
+        emit(State.Success(Pair(result, resultFlag)))
     }.catch {
         throw it
     }.flowOn(Dispatchers.IO)
@@ -82,6 +89,18 @@ class UserRepository(
             )
         }
         emit(State.Success(result))
+    }.catch {
+        throw it
+    }.flowOn(Dispatchers.IO)
+
+    suspend fun setFlags(flags: Flags) = flow {
+        emit(State.Loading())
+        val request = Firebase.firestore
+            .collection(Flags.REF)
+            .document(Flags.DEFAULT)
+            .set(flags)
+        request.await()
+        emit(State.Success(true))
     }.catch {
         throw it
     }.flowOn(Dispatchers.IO)

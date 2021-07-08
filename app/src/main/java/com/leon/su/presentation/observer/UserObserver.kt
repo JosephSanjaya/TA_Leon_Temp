@@ -2,6 +2,7 @@ package com.leon.su.presentation.observer
 
 import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseUser
+import com.leon.su.domain.Flags
 import com.leon.su.domain.State
 import com.leon.su.domain.UserResponse
 import com.leon.su.presentation.viewmodel.UserViewModel
@@ -54,7 +55,7 @@ class UserObserver(
                     is State.Idle -> view.onGetUserDataIdle()
                     is State.Loading -> view.onGetUserDataLoading()
                     is State.Success -> {
-                        view.onGetUserDataSuccess(it.data)
+                        view.onGetUserDataSuccess(it.data.first, it.data.second)
                         viewModel.resetGetUserData()
                     }
                     is State.Failed -> {
@@ -97,6 +98,22 @@ class UserObserver(
             }
         }
         owner.lifecycleScope.launch {
+            viewModel.mFlags.collect {
+                when (it) {
+                    is State.Idle -> view.onSetFlagsIdle()
+                    is State.Loading -> view.onSetFlagsLoading()
+                    is State.Success -> {
+                        view.onSetFlagsSuccess()
+                        viewModel.resetFlagsState()
+                    }
+                    is State.Failed -> {
+                        view.onSetFlagsFailed(it.throwable)
+                        viewModel.resetFlagsState()
+                    }
+                }
+            }
+        }
+        owner.lifecycleScope.launch {
             viewModel.mFetchUsers.collect {
                 when (it) {
                     is State.Idle -> view.onFetchUsersIdle()
@@ -118,12 +135,17 @@ class UserObserver(
         fun onGetUserDataIdle() {}
         fun onGetUserDataLoading() {}
         fun onGetUserDataFailed(e: Throwable) {}
-        fun onGetUserDataSuccess(user: UserResponse?) {}
+        fun onGetUserDataSuccess(user: UserResponse?, flags: Flags?) {}
 
         fun onDeleteUserIdle() {}
         fun onDeleteUserLoading() {}
         fun onDeleteUserSuccess() {}
         fun onDeleteUserFailed(e: Throwable) {}
+
+        fun onSetFlagsIdle() {}
+        fun onSetFlagsLoading() {}
+        fun onSetFlagsSuccess() {}
+        fun onSetFlagsFailed(e: Throwable) {}
 
         fun onReloadIdle() {}
         fun onReloadLoading() {}
