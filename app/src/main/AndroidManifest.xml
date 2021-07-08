@@ -21,9 +21,6 @@
             android:name=".presentation.ProductInvoicesActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.PriceUpdateActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".presentation.RegisterPegawaiActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -34,9 +31,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.EditFormProductActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".presentation.StockUpdateActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.VerifyActivity"

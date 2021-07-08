@@ -5,7 +5,7 @@
     <string name="login_button">Masuk</string>
     <string name="invoice_button">Buat Invoice Baru</string>
     <string name="stock_button">Barang Masuk</string>
-    <string name="price_button">Ubah Harga</string>
+    <string name="productedit_button">Edit Data Produk</string>
     <string name="product_button">Tambah Produk Baru</string>
     <string name="uregister_button">Daftar Akun Baru</string>
     <string name="et_nama">Nama Lengkap</string>
