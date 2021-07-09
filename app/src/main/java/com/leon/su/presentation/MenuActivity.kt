@@ -61,6 +61,7 @@ class MenuActivity :
         if (!isAdmin) {
             mBinding.uRegisterButton.visibility = View.GONE
             mBinding.PriceButton.visibility = View.GONE
+            mBinding.tbStatus.visibility = View.GONE
         }
         mViewModel.getUserData(Firebase.auth.uid.toString())
     }
