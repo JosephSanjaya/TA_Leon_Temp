@@ -9,6 +9,7 @@
     <string name="productedit_button">Edit Data Produk</string>
     <string name="product_button">Tambah Produk Baru</string>
     <string name="uregister_button">Daftar Akun Baru</string>
+    <string name="label_button_history">Riwayat Transaksi</string>
     <string name="et_nama">Nama Lengkap</string>
     <string name="label_search">Cari…</string>
     <string name="register_button">Daftar</string>

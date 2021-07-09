@@ -31,82 +31,85 @@
                 app:theme="@style/AppTheme.AppBarOverlay" />
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".presentation.MenuActivity"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".presentation.MenuActivity">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/InvoiceButton"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:onClick="@{listener}"
-                android:text="@string/invoice_button"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/StockButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/StockButton"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:onClick="@{listener}"
-                android:text="@string/stock_button"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/PriceButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/InvoiceButton"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/PriceButton"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:onClick="@{listener}"
-                android:text="@string/productedit_button"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@id/ProductButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/StockButton"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/ProductButton"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:onClick="@{listener}"
-                android:text="@string/product_button"
-                android:textSize="20dp"
-                app:layout_constraintBottom_toTopOf="@+id/uRegisterButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/PriceButton"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/uRegisterButton"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_margin="5dp"
-                android:onClick="@{listener}"
-                android:text="@string/uregister_button"
-                android:textSize="20dp"
+            <ScrollView
+                android:id="@+id/svMenu"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toTopOf="@+id/tbStatus"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ProductButton"
-                app:layout_constraintVertical_chainStyle="packed" />
+                app:layout_constraintTop_toTopOf="parent" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/InvoiceButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="@{listener}"
+                        android:text="@string/invoice_button"
+                        android:textSize="20dp"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/StockButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="@{listener}"
+                        android:text="@string/stock_button"
+                        android:textSize="20dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="@{listener}"
+                        android:text="@string/label_button_history"
+                        android:textSize="20dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/PriceButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="@{listener}"
+                        android:text="@string/productedit_button"
+                        android:textSize="20dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/ProductButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="@{listener}"
+                        android:text="@string/product_button"
+                        android:textSize="20dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/uRegisterButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_margin="5dp"
+                        android:onClick="@{listener}"
+                        android:text="@string/uregister_button"
+                        android:textSize="20dp" />
+
+                </LinearLayout>
+
+            </ScrollView>
 
             <ToggleButton
                 android:id="@+id/tbStatus"
@@ -114,15 +117,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:background="@android:color/holo_red_dark"
+                android:onClick="@{listener}"
                 android:textColor="@android:color/white"
                 android:textOff="Tutup"
                 android:textOn="Buka"
-                android:onClick="@{listener}"
-                app:layout_constraintTop_toBottomOf="@+id/uRegisterButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/svMenu" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

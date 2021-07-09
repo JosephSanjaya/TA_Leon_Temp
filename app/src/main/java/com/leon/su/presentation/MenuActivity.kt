@@ -135,6 +135,8 @@ class MenuActivity :
         when (v) {
             mBinding.ProductButton ->
                 ActivityUtils.startActivity(ProductActivity::class.java)
+            mBinding.btnHistory ->
+                ActivityUtils.startActivity(HistoryActivity::class.java)
             mBinding.PriceButton ->
                 ActivityUtils.startActivity(EditProductActivity::class.java)
             mBinding.InvoiceButton -> launchInvoices(false)

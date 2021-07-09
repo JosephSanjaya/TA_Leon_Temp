@@ -65,7 +65,7 @@ class InboundFragment :
         mBinding.listener = this
         val data = mutableListOf<InvoicesListProvider.Type>()
         data.add(
-            InvoicesListProvider.Type.Header(
+            InvoicesListProvider.Type.InboundHeader(
                 DateTime.nowLocal().local,
                 mSharedPreferences.users?.data?.nama.toString()
             )
