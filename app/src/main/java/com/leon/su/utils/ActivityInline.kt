@@ -111,13 +111,9 @@ fun ToggleButton.setButtonStatus(status: Boolean) {
 }
 
 fun Context.fileToUri(file: File): Uri {
-    return if (DeviceUtils.getSDKVersionCode() > 29) {
-        FileProvider.getUriForFile(
-            this,
-            BuildConfig.APPLICATION_ID + ".provider",
-            file
-        )
-    } else {
-        UriUtils.file2Uri(file)
-    }
+    return FileProvider.getUriForFile(
+        this,
+        BuildConfig.APPLICATION_ID + ".provider",
+        file
+    )
 }
