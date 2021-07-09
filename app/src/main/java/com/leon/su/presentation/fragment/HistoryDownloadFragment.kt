@@ -36,6 +36,7 @@ import com.leon.su.presentation.adapter.HistoryListAdapter
 import com.leon.su.presentation.observer.StorageObserver
 import com.leon.su.presentation.viewmodel.HistoryActivityViewModel
 import com.leon.su.presentation.viewmodel.StorageViewModel
+import com.leon.su.utils.fileToUri
 import com.leon.su.utils.makeLoadingDialog
 import java.io.File
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -150,13 +151,8 @@ class HistoryDownloadFragment :
             val ext = FileUtils.getFileExtension(data)
             var type = map.getMimeTypeFromExtension(ext)
             if (type == null) type = "*/*"
-            val uri = FileProvider.getUriForFile(
-                requireActivity(),
-                BuildConfig.APPLICATION_ID + ".provider",
-                data
-            )
             viewFile.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            viewFile.setDataAndType(uri, type)
+            viewFile.setDataAndType(requireActivity().fileToUri(data), type)
             startActivity(viewFile)
         } catch (e: Throwable) {
             ToastUtils.showShort(e.message)

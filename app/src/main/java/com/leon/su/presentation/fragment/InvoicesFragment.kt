@@ -102,7 +102,11 @@ class InvoicesFragment :
                     loading?.show()
                     if (response?.file != null) {
                         lifecycleScope.launchWhenResumed {
-                            mSharedPreferences.uploadPDF(response.file, PDFType.INVOICES) {
+                            mSharedPreferences.uploadPDF(
+                                requireContext(),
+                                response.file,
+                                PDFType.INVOICES
+                            ) {
                                 loading?.dismiss()
                                 super.onSuccess(response)
                                 activity?.finish()

@@ -18,7 +18,7 @@ object StorageDI {
             )
         }
         single {
-            StorageRepository(get(), get())
+            StorageRepository(get(), androidContext(), get())
         }
         viewModel {
             StorageViewModel(get())

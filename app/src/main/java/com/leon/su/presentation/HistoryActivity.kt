@@ -29,4 +29,9 @@ class HistoryActivity : AppCompatActivity(R.layout.activity_fragment) {
         }
         replaceFragment(HistoryFragment())
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }

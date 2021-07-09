@@ -100,7 +100,9 @@ class InboundFragment :
                     loading?.show()
                     if (response?.file != null) {
                         lifecycleScope.launchWhenResumed {
-                            mSharedPreferences.uploadPDF(response.file, PDFType.INBOUND) {
+                            mSharedPreferences.uploadPDF(
+                                requireContext(), response.file, PDFType.INBOUND
+                            ) {
                                 loading?.dismiss()
                                 super.onSuccess(response)
                                 activity?.finish()

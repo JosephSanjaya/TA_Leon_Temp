@@ -1,5 +1,6 @@
 package com.leon.su.data
 
+import android.content.Context
 import android.content.SharedPreferences
 import com.blankj.utilcode.util.PathUtils
 import com.blankj.utilcode.util.UriUtils
@@ -7,6 +8,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.leon.su.domain.State
+import com.leon.su.utils.fileToUri
 import com.soywiz.klock.DateTime
 import com.tonyodev.fetch2.*
 import com.tonyodev.fetch2core.DownloadBlock
@@ -19,6 +21,7 @@ import kotlinx.coroutines.tasks.await
 
 class StorageRepository(
     val mSharedPreferences: SharedPreferences,
+    val context: Context,
     val fetch: Fetch
 ) {
     suspend fun upload(file: File) = flow {
@@ -30,7 +33,7 @@ class StorageRepository(
                 DateTime.nowLocal().toString("HH:mm")
                 }"
             )
-            .putFile(UriUtils.file2Uri(file))
+            .putFile(context.fileToUri(file))
         upload.await()
         emit(State.Success(true))
     }
@@ -57,7 +60,7 @@ class StorageRepository(
         val request = ref.downloadUrl
         val url = request.await()
         val requestDownload = Request(
-            url.toString(), UriUtils.file2Uri(file)
+            url.toString(), context.fileToUri(file)
         ).apply {
             priority = Priority.HIGH
             networkType = NetworkType.ALL
@@ -72,7 +75,7 @@ class StorageRepository(
             }
 
             override fun onCompleted(download: Download) {
-                trySend(State.Success(UriUtils.uri2File(download.fileUri)))
+                trySend(State.Success(file))
                 close()
             }
 

@@ -3,20 +3,20 @@ package com.leon.su.utils
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.view.View
 import android.widget.ToggleButton
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.blankj.utilcode.util.ColorUtils
-import com.blankj.utilcode.util.PathUtils
-import com.blankj.utilcode.util.ToastUtils
-import com.blankj.utilcode.util.UriUtils
+import com.blankj.utilcode.util.*
 import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.leon.su.BuildConfig
 import com.leon.su.R
 import com.leon.su.data.users
 import com.leon.su.domain.PDFType
@@ -82,7 +82,12 @@ fun Context.createPDF(view: View, listener: PdfGeneratorListener) {
         .build(listener)
 }
 
-suspend fun SharedPreferences.uploadPDF(file: File, type: PDFType, action: () -> Unit) {
+suspend fun SharedPreferences.uploadPDF(
+    context: Context,
+    file: File,
+    type: PDFType,
+    action: () -> Unit
+) {
     val upload = Firebase.storage.reference
         .child(DateTime.nowLocal().toString("dd-MM-yyyy"))
         .child(
@@ -90,7 +95,7 @@ suspend fun SharedPreferences.uploadPDF(file: File, type: PDFType, action: () ->
             DateTime.nowLocal().toString("HH:mm:ss")
             }.pdf"
         )
-        .putFile(UriUtils.file2Uri(file))
+        .putFile(context.fileToUri(file))
     upload.await()
     action.invoke()
 }
@@ -103,4 +108,16 @@ fun ToggleButton.setButtonStatus(status: Boolean) {
         )
     )
     isChecked = status
+}
+
+fun Context.fileToUri(file: File): Uri {
+    return if (DeviceUtils.getSDKVersionCode() > 29) {
+        FileProvider.getUriForFile(
+            this,
+            BuildConfig.APPLICATION_ID + ".provider",
+            file
+        )
+    } else {
+        UriUtils.file2Uri(file)
+    }
 }
